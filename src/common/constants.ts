@@ -16,61 +16,61 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import { IpfsGateway } from "@/models/Gateway";
+import { ChainType } from '@/models/Chain';
+import { IpfsGateway } from '@/models/Gateway';
 
 export const CHAIN_TYPE: ChainType =
-    (process.env.NEXT_PUBLIC_CHAIN_TYPE ?? `TestNet`) === `TestNet`
-        ? ChainType.TestNet
-        : ChainType.MainNet;
+  (process.env.NEXT_PUBLIC_CHAIN_TYPE ?? `TestNet`) === `TestNet`
+    ? ChainType.TestNet
+    : ChainType.MainNet;
 
 export const SITE_IS_UNDER_MAINTENANCE =
-    process.env.NEXT_PUBLIC_UNDER_MAINTENANCE === `true`;
+  process.env.NEXT_PUBLIC_UNDER_MAINTENANCE === `true`;
 
 export const ALGOEXPLORER_API_URL = (chain: ChainType) => {
-    return chain.toLowerCase() === `mainnet`
-        ? `https://node.algoexplorerapi.io`
-        : `https://node.testnet.algoexplorerapi.io`;
+  return chain.toLowerCase() === `mainnet`
+    ? `https://node.algoexplorerapi.io`
+    : `https://node.testnet.algoexplorerapi.io`;
 };
 
 export const ALGOEXPLORER_INDEXER_URL = (chain: ChainType) => {
-    return chain.toLowerCase() === `mainnet`
-        ? `https://algoindexer.algoexplorerapi.io`
-        : `https://algoindexer.testnet.algoexplorerapi.io`;
+  return chain.toLowerCase() === `mainnet`
+    ? `https://algoindexer.algoexplorerapi.io`
+    : `https://algoindexer.testnet.algoexplorerapi.io`;
 };
 
 export const ALGONODE_INDEXER_URL = (chain: ChainType) => {
-    return chain.toLowerCase() === `mainnet`
-        ? `	https://mainnet-idx.algonode.cloud`
-        : `https://testnet-idx.algonode.cloud`;
+  return chain.toLowerCase() === `mainnet`
+    ? `	https://mainnet-idx.algonode.cloud`
+    : `https://testnet-idx.algonode.cloud`;
 };
 
 export const ALGOEXPLORER_URL = (chain: ChainType) => {
-    return chain.toLowerCase() === `mainnet`
-        ? `https://algoexplorer.io`
-        : `https://testnet.algoexplorer.io`;
+  return chain.toLowerCase() === `mainnet`
+    ? `https://algoexplorer.io`
+    : `https://testnet.algoexplorer.io`;
 };
 
 export const EMPTY_ASSET_IMAGE_URL = (gateway: IpfsGateway) => {
-    return `https://${gateway}/ipfs/QmXrsy5TddTiwDCXqGc2yzNowKs7WhCJfQ17rvHuArfnQp`;
+  return `https://${gateway}/ipfs/QmXrsy5TddTiwDCXqGc2yzNowKs7WhCJfQ17rvHuArfnQp`;
 };
 export const CITY_PACK_IMAGE_URL = (gateway: IpfsGateway) => {
-    return `https://${gateway}/ipfs/bafybeie33admi7vcovaefm2mwjukyezpf7fllzi7vsqcdg5u7zskxzlt34`;
+  return `https://${gateway}/ipfs/bafybeie33admi7vcovaefm2mwjukyezpf7fllzi7vsqcdg5u7zskxzlt34`;
 };
 export const LATEST_SWAP_PROXY_VERSION = `0.0.2`;
 export const ALL_SWAP_PROXY_VERSIONS = [LATEST_SWAP_PROXY_VERSION, `0.0.1`];
 export const AWT_ASSET_ID = (chain: ChainType) => {
-    return chain === ChainType.MainNet ? 233939122 : 51363057;
+  return chain === ChainType.MainNet ? 233939122 : 51363057;
 };
 export const CITY_MANAGER_ADDRESS = `TSYD5NUVJZLYB3MDFZSAVCSXDDH3ZABDDUARUDAWTU7KVMNVHCH2NQOYWE`;
 
 export const AWVT_ASSET_INDEX = (chain: ChainType) => {
-    return chain === ChainType.MainNet ? 827624831 : 100256867;
+  return chain === ChainType.MainNet ? 827624831 : 100256867;
 };
 export const AWVT_CREATOR_ADDRESS = (chain: ChainType) => {
-    return chain === ChainType.MainNet
-        ? `C5NGOAUZFT63NNUN6AYQUV76FDWYBH2HIJJO737J3GMRFNC72EGH75632A`
-        : `SUF5OEJIPBSBYELHBPOXWR3GH5T2J5Y7XHW5K6L3BJ2FEQ4A6XQZVNN4UM`;
+  return chain === ChainType.MainNet
+    ? `C5NGOAUZFT63NNUN6AYQUV76FDWYBH2HIJJO737J3GMRFNC72EGH75632A`
+    : `SUF5OEJIPBSBYELHBPOXWR3GH5T2J5Y7XHW5K6L3BJ2FEQ4A6XQZVNN4UM`;
 };
 
 export const ASA_TO_ASA_FUNDING_FEE = Math.round((0.1 + 0.1 + 0.01) * 1e6);
@@ -97,3 +97,27 @@ export const PERFORM_SWAP_PERFORM_BUTTON_ID = `AWPerformSwapPerformButton`;
 
 export const PUBLIC_SWAPS_SEARCH_FIELD_ID = `AWPublicSwapsSearchField`;
 export const PUBLIC_SWAPS_SEARCH_BUTTON_ID = `AWPublicSwapsSearchButton`;
+
+export const ALGOREALM_APP_ID = 137491307;
+export const ALGOREALM_FIRST_BLOCK = 13578170;
+export const ALGOREALM_CROWN_ID = 137493252;
+export const ALGOREALM_SCEPTRE_ID = 137494385;
+
+export const ALGOREALM_POEM = `
+◦,-----------------------------------------.
+(_\\◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦\\
+◦◦◦|◦◦There◦was◦a◦time◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
+◦◦◦|◦◦When◦nothing◦but◦Entropy◦was◦there.◦◦◦◦|
+◦◦◦|◦◦Then◦came◦the◦cryptographic◦Proof,◦◦◦◦◦|
+◦◦◦|◦◦And◦took◦it◦care.◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
+◦◦◦|◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
+◦◦◦|◦◦Verifiability◦of◦randomness,◦◦◦◦◦◦◦◦◦◦◦|
+◦◦◦|◦◦Since◦genesis◦block,◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
+◦◦◦|◦◦Brings◦Consensus◦over◦realm◦vastness,◦◦|
+◦◦◦|◦◦So◦Algorand◦never◦fork.◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
+◦◦_|◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
+◦(_/___________________(*)___________________/
+◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦\\\◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦
+◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦))◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦
+◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦^◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦
+    `;
