@@ -16,23 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { AlgoWorldAsset } from "@/models/AlgoWorldAsset";
-import { useAppSelector } from "@/redux/store/hooks";
-import { toIpfsProxyUrl } from "@/utils/toIpfsProxyUrl";
+import { AlgoWorldAsset } from '@/models/AlgoWorldAsset';
+import { useAppSelector } from '@/redux/store/hooks';
+import { toIpfsProxyUrl } from '@/utils/toIpfsProxyUrl';
 import {
-    Button,
-    Grow,
-    ImageList,
-    ImageListItem,
-    ImageListItemBar,
-    Stack,
-    useMediaQuery,
-    useTheme,
-} from "@mui/material";
-import Image from "next/image";
+  Button,
+  Grow,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import Image from 'next/image';
 
 type Props = {
-    assets: AlgoWorldAsset[];
+  assets: AlgoWorldAsset[];
 };
 
 const shimmer = (w: number, h: number) => `
@@ -50,75 +50,71 @@ const shimmer = (w: number, h: number) => `
 </svg>`;
 
 const toBase64 = (str: string) =>
-    typeof window === `undefined`
-        ? Buffer.from(str).toString(`base64`)
-        : window.btoa(str);
+  typeof window === `undefined`
+    ? Buffer.from(str).toString(`base64`)
+    : window.btoa(str);
 
 const AssetsImageList = ({ assets }: Props) => {
-    const theme = useTheme();
-    const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
-    const { gateway } = useAppSelector((state) => state.walletConnect);
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
+  const { gateway } = useAppSelector((state) => state.walletConnect);
 
-    return (
-        <ImageList gap={0} cols={largeScreen ? 4 : 1} sx={{ width: `100%` }}>
-            {assets.map((item) => (
-                <Grow key={item.index} in {...{ timeout: 1000 }}>
-                    <ImageListItem
-                        sx={{
-                            display: `flex`,
-                            width: `100%`,
-                            height: `100%`,
-                            justifyContent: `top`,
-                        }}
-                    >
-                        <Image
-                            src={toIpfsProxyUrl(item.url, gateway)}
-                            loading="lazy"
-                            blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                                shimmer(700, 475)
-                            )}`}
-                            placeholder="blur"
-                            width={200}
-                            objectFit="cover"
-                            height={400}
-                            sizes="(max-width: 768px) 100vw,
+  return (
+    <ImageList gap={0} cols={largeScreen ? 4 : 1} sx={{ width: `100%` }}>
+      {assets.map((item) => (
+        <Grow key={item.index} in {...{ timeout: 1000 }}>
+          <ImageListItem
+            sx={{
+              display: `flex`,
+              width: `100%`,
+              height: `100%`,
+              justifyContent: `top`,
+            }}
+          >
+            <Image
+              src={toIpfsProxyUrl(item.url, gateway)}
+              loading="lazy"
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                shimmer(700, 475),
+              )}`}
+              placeholder="blur"
+              width={200}
+              objectFit="cover"
+              height={400}
+              sizes="(max-width: 768px) 100vw,
               (max-width: 1200px) 50vw,
               33vw"
-                            alt={`AlgoWorld Card`}
-                        />
-                        <ImageListItemBar
-                            sx={{ textAlign: `center` }}
-                            title={item.name}
-                            subtitle={<span>ID: {item.index}</span>}
-                            position="below"
-                        />
-                        <Stack
-                            sx={{ pb: 2 }}
-                            direction={`row`}
-                            justifyContent="center"
-                        >
-                            <Button
-                                size="small"
-                                variant="outlined"
-                                target="_blank"
-                                href={`https://algoexplorer.io/asset/${item.index}`}
-                            >
-                                AlgoExplorer
-                            </Button>
-                            <Button
-                                size="small"
-                                variant="outlined"
-                                target="_blank"
-                                href={`https://randgallery.com/algo-collection/?address=${item.index}`}
-                            >
-                                RandGallery
-                            </Button>
-                        </Stack>
-                    </ImageListItem>
-                </Grow>
-            ))}
-        </ImageList>
-    );
+              alt={`AlgoWorld Card`}
+            />
+            <ImageListItemBar
+              sx={{ textAlign: `center` }}
+              title={item.name}
+              subtitle={<span>ID: {item.index}</span>}
+              position="below"
+            />
+            <Stack sx={{ pb: 2 }} direction={`row`} justifyContent="center">
+              <Button
+                size="small"
+                variant="outlined"
+                target="_blank"
+                href={`https://algoexplorer.io/asset/${item.index}`}
+              >
+                AlgoExplorer
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                target="_blank"
+                href={`https://randgallery.com/algo-collection/?address=${item.index}`}
+              >
+                RandGallery
+              </Button>
+            </Stack>
+          </ImageListItem>
+        </Grow>
+      ))}
+    </ImageList>
+  );
 };
 
 export default AssetsImageList;

@@ -16,32 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import { indexerForChain } from "@/utils/algorand";
+import { ChainType } from '@/models/Chain';
+import { indexerForChain } from '@/utils/algorand';
 
 export default async function getAssetBalance(
-    index: number,
-    account: string,
-    chain: ChainType
+  index: number,
+  account: string,
+  chain: ChainType,
 ): Promise<number> {
-    try {
-        const response = await indexerForChain(chain)
-            .lookupAccountByID(account)
-            .exclude(`created-assets,apps-local-state,created-apps`)
-            .do();
+  try {
+    const response = await indexerForChain(chain)
+      .lookupAccountByID(account)
+      .exclude(`created-assets,apps-local-state,created-apps`)
+      .do();
 
-        const asset = response.account.assets.filter(
-            (asset: { [x: string]: number }) => {
-                return asset[`asset-id`] === index;
-            }
-        );
+    const asset = response.account.assets.filter(
+      (asset: { [x: string]: number }) => {
+        return asset[`asset-id`] === index;
+      },
+    );
 
-        if (asset.length === 1) {
-            return asset[0][`amount`];
-        }
-
-        return -1;
-    } catch (e) {
-        return -1;
+    if (asset.length === 1) {
+      return asset[0][`amount`];
     }
+
+    return -1;
+  } catch (e) {
+    return -1;
+  }
 }

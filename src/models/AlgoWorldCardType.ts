@@ -17,7 +17,7 @@
  */
 
 export enum AlgoWorldCardType {
-    CITY = `cities`,
-    COUNTRY = `countries`,
-    SPECIAL = `special`,
+  CITY = `cities`,
+  COUNTRY = `countries`,
+  SPECIAL = `special`,
 }

@@ -16,39 +16,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 type Props = {
-    label: string;
-    value: string;
-    values: string[];
-    onSelect: (value: string) => void;
-    id?: string;
+  label: string;
+  value: string;
+  values: string[];
+  onSelect: (value: string) => void;
+  id?: string;
 };
 
 const ValueSelect = ({ id, label, value, values, onSelect }: Props) => {
-    return (
-        <FormControl sx={{ p: 1, width: `100%` }} size="small" id={id}>
-            <InputLabel id="demo-select-small">{label}</InputLabel>
-            <Select
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={value}
-                label={label}
-                onChange={(event) => {
-                    onSelect(event.target.value);
-                }}
-            >
-                {values.map((currentValue) => {
-                    return (
-                        <MenuItem key={currentValue} value={currentValue}>
-                            {currentValue}
-                        </MenuItem>
-                    );
-                })}
-            </Select>
-        </FormControl>
-    );
+  return (
+    <FormControl sx={{ p: 1, width: `100%` }} size="small" id={id}>
+      <InputLabel id="demo-select-small">{label}</InputLabel>
+      <Select
+        labelId="demo-select-small"
+        id="demo-select-small"
+        value={value}
+        label={label}
+        onChange={(event) => {
+          onSelect(event.target.value);
+        }}
+      >
+        {values.map((currentValue) => {
+          return (
+            <MenuItem key={currentValue} value={currentValue}>
+              {currentValue}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
+  );
 };
 
 export default ValueSelect;

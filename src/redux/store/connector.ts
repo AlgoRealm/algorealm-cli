@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { createContext } from "react";
-import WalletManager from "@/wallets/walletManager";
+import { createContext } from 'react';
+import WalletManager from '@/wallets/walletManager';
 
 export const connector = new WalletManager();
 export const ConnectContext = createContext(connector);

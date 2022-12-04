@@ -17,8 +17,8 @@
  */
 
 enum AlgoWorldTransactionType {
-    InfluenceDeposit = `influence`,
-    PackPurchase = `pack`,
+  InfluenceDeposit = `influence`,
+  PackPurchase = `pack`,
 }
 
 export default AlgoWorldTransactionType;

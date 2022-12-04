@@ -16,30 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import { SubmitTransactionResponse } from "@/models/Transaction";
-import { algodForChain } from "@/utils/algorand";
-import waitForTransaction from "./waitForTransaction";
+import { ChainType } from '@/models/Chain';
+import { SubmitTransactionResponse } from '@/models/Transaction';
+import { algodForChain } from '@/utils/algorand';
+import waitForTransaction from './waitForTransaction';
 
 export default async function submitTransactions(
-    chain: ChainType,
-    stxns: Uint8Array[]
+  chain: ChainType,
+  stxns: Uint8Array[],
 ): Promise<SubmitTransactionResponse> {
-    let txIdResponse: string | undefined = undefined;
-    let confirmedRound: number | undefined = undefined;
+  let txIdResponse: string | undefined = undefined;
+  let confirmedRound: number | undefined = undefined;
 
-    try {
-        const { txId } = await algodForChain(chain)
-            .sendRawTransaction(stxns)
-            .do();
-        txIdResponse = txId;
-        confirmedRound = await waitForTransaction(chain, txId);
-    } catch (e) {
-        console.log(e);
-    }
+  try {
+    const { txId } = await algodForChain(chain).sendRawTransaction(stxns).do();
+    txIdResponse = txId;
+    confirmedRound = await waitForTransaction(chain, txId);
+  } catch (e) {
+    console.log(e);
+  }
 
-    return {
-        confirmedRound: confirmedRound,
-        txId: txIdResponse,
-    } as SubmitTransactionResponse;
+  return {
+    confirmedRound: confirmedRound,
+    txId: txIdResponse,
+  } as SubmitTransactionResponse;
 }

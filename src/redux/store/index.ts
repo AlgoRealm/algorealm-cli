@@ -17,28 +17,28 @@
  */
 
 import {
-    configureStore,
-    PreloadedState,
-    combineReducers,
-} from "@reduxjs/toolkit";
-import walletConnectReducer from "../slices/walletConnectSlice";
-import applicationReducer from "../slices/applicationSlice";
-import logger from "../middleware/logger";
+  configureStore,
+  PreloadedState,
+  combineReducers,
+} from '@reduxjs/toolkit';
+import walletConnectReducer from '../slices/walletConnectSlice';
+import applicationReducer from '../slices/applicationSlice';
+import logger from '../middleware/logger';
 
 const rootReducer = combineReducers({
-    walletConnect: walletConnectReducer,
-    application: applicationReducer,
+  walletConnect: walletConnectReducer,
+  application: applicationReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<any>) => {
-    return configureStore({
-        reducer: rootReducer,
-        preloadedState,
-        middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware({
-                serializableCheck: false,
-            }).concat(logger),
-    });
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }).concat(logger),
+  });
 };
 
 const store = setupStore({});

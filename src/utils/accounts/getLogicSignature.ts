@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { LogicSigAccount } from "algosdk";
+import { LogicSigAccount } from 'algosdk';
 
 export default function getLogicSign(compiledContract: string) {
-    const program = new Uint8Array(Buffer.from(compiledContract, `base64`));
-    return new LogicSigAccount(program, []);
+  const program = new Uint8Array(Buffer.from(compiledContract, `base64`));
+  return new LogicSigAccount(program, []);
 }

@@ -16,19 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react";
-import { Stack, Typography } from "@mui/material";
+import React from 'react';
+import { Stack, Typography } from '@mui/material';
 
 const MaintenanceLayout = () => {
-    return (
-        <Stack alignItems="center" direction="column" sx={{ pt: 20 }}>
-            <Typography variant="h4" component="h2">
-                ⚠️ Maintenance ⚠️
-            </Typography>
-            <Typography variant="h5" component="h2">
-                Please, check back later...
-            </Typography>
-        </Stack>
-    );
+  return (
+    <Stack alignItems="center" direction="column" sx={{ pt: 20 }}>
+      <Typography variant="h4" component="h2">
+        ⚠️ Maintenance ⚠️
+      </Typography>
+      <Typography variant="h5" component="h2">
+        Please, check back later...
+      </Typography>
+    </Stack>
+  );
 };
 export default MaintenanceLayout;

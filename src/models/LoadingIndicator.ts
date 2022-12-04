@@ -17,6 +17,6 @@
  */
 
 export type LoadingIndicator = {
-    isLoading: boolean;
-    message?: string | undefined;
+  isLoading: boolean;
+  message?: string | undefined;
 };

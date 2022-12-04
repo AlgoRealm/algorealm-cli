@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import algosdk from "algosdk";
-import { algodForChain } from "@/utils/algorand";
+import { ChainType } from '@/models/Chain';
+import algosdk from 'algosdk';
+import { algodForChain } from '@/utils/algorand';
 
 export default async function getTransactionParams(
-    chain: ChainType
+  chain: ChainType,
 ): Promise<algosdk.SuggestedParams> {
-    const params = await algodForChain(chain).getTransactionParams().do();
-    return params;
+  const params = await algodForChain(chain).getTransactionParams().do();
+  return params;
 }

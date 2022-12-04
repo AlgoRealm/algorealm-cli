@@ -18,7 +18,7 @@
 
 import { Container } from '@mui/material';
 import PageHeader from '@/components/Headers/PageHeader';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import Terminal from 'react-console-emulator';
 import { PeraWalletConnect } from '@perawallet/connect';
 import { ellipseAddress } from '@/utils/ellipseAddress';
@@ -27,18 +27,56 @@ import { indexerForChain } from '@/utils/algorand';
 import { ChainType } from '@/models/Chain';
 import { getAlgoRealmHistory } from '@/utils/getAlgoRealmHistory';
 import { getAlgoRealmCalls } from '@/utils/getAlgoRealmCalls';
-import { ALGOREALM_CROWN_ID, ALGOREALM_POEM } from '@/common/constants';
+import {
+  ALGOREALM_CROWN_ID,
+  ALGOREALM_POEM,
+  CONNECTED_WALLET_TYPE,
+} from '@/common/constants';
 import { optInAsset } from '@/utils/optInAsset';
-
-const peraWallet = new PeraWalletConnect();
+import { ConnectContext } from '@/redux/store/connector';
+import { WalletType } from '@/models/Wallet';
+import {
+  getAccountAssets,
+  onSessionUpdate,
+  switchChain,
+} from '@/redux/slices/walletConnectSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
 
 const Console = () => {
-  const [accountAddress, setAccountAddress] = useState<string | null>(null);
-  const isConnectedToPeraWallet = useMemo(() => {
-    return !!accountAddress;
-  }, [accountAddress]);
-
+  const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const connector = useContext(ConnectContext);
+
+  const connect = useCallback(
+    async (
+      clientType: WalletType,
+      fromClickEvent: boolean,
+      phrase?: string,
+    ) => {
+      // MyAlgo Connect doesn't work if invoked oustide of click event
+      // Hence this work around
+      if (!fromClickEvent && clientType === WalletType.MyAlgoWallet) {
+        return;
+      }
+
+      if (connector.connected) {
+        const accounts = connector.accounts();
+        accounts.length > 0
+          ? dispatch(onSessionUpdate(accounts))
+          : await connector.connect();
+      } else {
+        connector.setWalletClient(clientType, phrase);
+        await connector.connect();
+      }
+    },
+    [connector, dispatch],
+  );
+
+  const disconnect = async () => {
+    await connector
+      .disconnect()
+      .catch((err: { message: any }) => console.error(err.message));
+  };
 
   const loadHistory = async () => {
     const attempts = 1;
@@ -55,41 +93,9 @@ const Console = () => {
     return getAlgoRealmHistory(algoRealmCalls);
   };
 
-  const handleDisconnectWalletClick = () => {
-    peraWallet.disconnect().catch((error) => {
-      console.log(error);
-    });
-    enqueueSnackbar(
-      `Disconnected from PeraWallet: ${ellipseAddress(accountAddress, 4)}`,
-      {
-        variant: `success`,
-      },
-    );
-    setAccountAddress(null);
-  };
-
-  const handleConnectWalletClick = () => {
-    peraWallet
-      .connect()
-      .then((newAccounts) => {
-        if (peraWallet.connector) {
-          peraWallet.connector.on(`disconnect`, handleDisconnectWalletClick);
-        }
-
-        setAccountAddress(newAccounts[0]);
-        enqueueSnackbar(
-          `Connected to PeraWallet: ${ellipseAddress(newAccounts[0], 4)}`,
-          {
-            variant: `success`,
-          },
-        );
-      })
-      .catch((error) => {
-        if (error?.data?.type !== `CONNECT_MODAL_CLOSED`) {
-          console.log(error);
-        }
-      });
-  };
+  const { address, gateway, chain } = useAppSelector(
+    (state) => state.walletConnect,
+  );
 
   const commands = {
     about: {
@@ -106,6 +112,7 @@ const Console = () => {
     },
     poem: {
       description: `Prints a poem.`,
+      link: `https://github.com/linuswillner/react-console-emulator/blob/master/demo/App.jsx#L70-L75`,
       fn: () => {
         return ALGOREALM_POEM;
       },
@@ -114,68 +121,81 @@ const Console = () => {
       description: `Claim the Crown of Entropy, become the Randomic Majesty of Algorand.`,
       usage: `claim-crown <majesty-name> <algos>`,
       fn: async (...args) => {
-        const test = args.join(` `);
+        if (args.length !== 2) {
+          return `Invalid number of arguments. Expected 2, got ${args.length}.`;
+        }
 
-        if (!isConnectedToPeraWallet || !accountAddress) {
+        const majestyName = args[0];
+        const algos = Number(args[1]);
+
+        if (!connector.connected) {
           return `You must connect to PeraWallet to claim the Crown of Entropy.`;
         }
 
-        return optInAsset(accountAddress, ALGOREALM_CROWN_ID, peraWallet);
+        return optInAsset(address, ALGOREALM_CROWN_ID, peraWallet);
       },
     },
     login: {
       description: `Login to PeraWallet | Print login status`,
       fn: () => {
-        if (isConnectedToPeraWallet) {
+        if (connector.connected) {
           return `You are already connected to PeraWallet: ${ellipseAddress(
-            accountAddress,
+            address,
             4,
           )}`;
         }
-        handleConnectWalletClick();
+
+        connect(WalletType.PeraWallet, false);
       },
     },
     logout: {
       description: `Logout from PeraWallet`,
       fn: () => {
-        if (!isConnectedToPeraWallet) {
-          return `You are already logged out: ${ellipseAddress(
-            accountAddress,
-            4,
-          )}`;
+        if (!connector.connected) {
+          return `You are already logged out: ${ellipseAddress(address, 4)}`;
         }
-        handleDisconnectWalletClick();
+        disconnect();
       },
     },
   };
 
   const customPromptLabel = useMemo(() => {
-    return isConnectedToPeraWallet
-      ? `(${ellipseAddress(accountAddress, 4)})$➜`
-      : `➜`;
-  }, [accountAddress, isConnectedToPeraWallet]);
+    return address ? `(${ellipseAddress(address, 4)})$➜` : `➜`;
+  }, [address]);
 
   useEffect(() => {
-    // Reconnect to the session when the component is mounted
-    peraWallet
-      .reconnectSession()
-      .then((accounts) => {
-        if (peraWallet.connector) {
-          peraWallet.connector.on(`disconnect`, handleDisconnectWalletClick);
-        }
+    const changeChain = (chain: ChainType) => {
+      dispatch(switchChain(chain));
+    };
 
-        if (accounts.length) {
-          setAccountAddress(accounts[0]);
-        }
-      })
-      .catch((e) => console.log(e));
-  });
+    if (typeof window !== `undefined`) {
+      const persistedChainType =
+        chain !== undefined
+          ? chain.toLowerCase() === `mainnet`
+            ? ChainType.MainNet
+            : ChainType.TestNet
+          : (localStorage.getItem(`ChainType`) as ChainType) ??
+            ChainType.TestNet;
+      changeChain(persistedChainType);
+    }
+
+    const connectedWalletType = localStorage.getItem(CONNECTED_WALLET_TYPE);
+    if (!connectedWalletType || connectedWalletType === ``) {
+      return;
+    } else {
+      connect(connectedWalletType as WalletType, false);
+    }
+
+    if (address) {
+      dispatch(getAccountAssets({ chain: chain, gateway, address }));
+    }
+  }, [dispatch, connector, address, chain, connect, gateway]);
 
   return (
     <div>
       <PageHeader
         title="🏰 AlgoRealm 👑"
-        description="Claim the Crown and the Sceptre of Algorand Realm (cli emulator edition)"
+        description="Claim the Crown and the Sceptre of Algorand Realm (CLI Emulator Edition)"
       />
 
       <Container component="main" sx={{ pt: 10 }}>

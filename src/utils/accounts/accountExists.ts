@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import { indexerForChain } from "../algorand";
+import { ChainType } from '@/models/Chain';
+import { indexerForChain } from '../algorand';
 
 export default async function accountExists(chain: ChainType, account: string) {
-    try {
-        await indexerForChain(chain).lookupAccountByID(account).do();
-        return true;
-    } catch (e) {
-        return false;
-    }
+  try {
+    await indexerForChain(chain).lookupAccountByID(account).do();
+    return true;
+  } catch (e) {
+    return false;
+  }
 }

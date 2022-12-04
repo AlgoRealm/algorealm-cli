@@ -16,40 +16,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { PackPurchaseNote } from "@/models/PackPurchaseNote";
+import { PackPurchaseNote } from '@/models/PackPurchaseNote';
 
 export default async function parsePackPurchaseTxn(
-    txns: Record<string, any>[]
+  txns: Record<string, any>[],
 ): Promise<PackPurchaseNote[]> {
-    const processedTxns: PackPurchaseNote[] = [];
+  const processedTxns: PackPurchaseNote[] = [];
 
-    for (const tx of txns) {
-        try {
-            if (
-                !(
-                    `payment-transaction` in tx &&
-                    tx[`payment-transaction`][`receiver`] ===
-                        `TSYD5NUVJZLYB3MDFZSAVCSXDDH3ZABDDUARUDAWTU7KVMNVHCH2NQOYWE`
-                )
-            ) {
-                continue;
-            }
+  for (const tx of txns) {
+    try {
+      if (
+        !(
+          `payment-transaction` in tx &&
+          tx[`payment-transaction`][`receiver`] ===
+            `TSYD5NUVJZLYB3MDFZSAVCSXDDH3ZABDDUARUDAWTU7KVMNVHCH2NQOYWE`
+        )
+      ) {
+        continue;
+      }
 
-            const decodedNote = Buffer.from(tx[`note`], `base64`)
-                .toString(`utf8`)
-                .split(`_`);
-            const noteContent = {
-                prefix: decodedNote[0],
-                operation: decodedNote[1],
-                packId: Number(decodedNote[2]),
-                buyerAddress: decodedNote[3],
-                txId: tx[`id`],
-            } as PackPurchaseNote;
-            processedTxns.push(noteContent);
-        } catch (e) {
-            continue;
-        }
+      const decodedNote = Buffer.from(tx[`note`], `base64`)
+        .toString(`utf8`)
+        .split(`_`);
+      const noteContent = {
+        prefix: decodedNote[0],
+        operation: decodedNote[1],
+        packId: Number(decodedNote[2]),
+        buyerAddress: decodedNote[3],
+        txId: tx[`id`],
+      } as PackPurchaseNote;
+      processedTxns.push(noteContent);
+    } catch (e) {
+      continue;
     }
+  }
 
-    return processedTxns;
+  return processedTxns;
 }

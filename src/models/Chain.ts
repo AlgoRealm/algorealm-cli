@@ -17,6 +17,6 @@
  */
 
 export enum ChainType {
-    MainNet = `mainnet`,
-    TestNet = `testnet`,
+  MainNet = `mainnet`,
+  TestNet = `testnet`,
 }

@@ -16,24 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import WalletConnect from "@walletconnect/client";
-import { Transaction } from "algosdk";
-import { LogicSigAccount } from "algosdk/dist/types/src/logicsig";
+import WalletConnect from '@walletconnect/client';
+import { Transaction } from 'algosdk';
+import { LogicSigAccount } from 'algosdk/dist/types/src/logicsig';
 
 export enum TransactionToSignType {
-    UserTransaction,
-    LsigTransaction,
-    UserFeeTransaction,
-    LsigFeeTransaction,
+  UserTransaction,
+  LsigTransaction,
+  UserFeeTransaction,
+  LsigFeeTransaction,
 }
 
 export interface TransactionToSign {
-    transaction: Transaction;
-    signer: WalletConnect | LogicSigAccount;
-    type: TransactionToSignType;
+  transaction: Transaction;
+  signer: WalletConnect | LogicSigAccount;
+  type: TransactionToSignType;
 }
 
 export type SubmitTransactionResponse = {
-    txId: string | undefined;
-    confirmedRound: number | undefined;
+  txId: string | undefined;
+  confirmedRound: number | undefined;
 };

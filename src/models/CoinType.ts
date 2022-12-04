@@ -17,6 +17,6 @@
  */
 
 export enum CoinType {
-    ALGO,
-    ASA,
+  ALGO,
+  ASA,
 }

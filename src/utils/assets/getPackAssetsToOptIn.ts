@@ -16,23 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Asset } from "@/models/Asset";
-import { CityPackAsa } from "@/models/CityPack";
+import { Asset } from '@/models/Asset';
+import { CityPackAsa } from '@/models/CityPack';
 
 export default function getPackAssetsToOptIn(
-    packAssets: CityPackAsa[],
-    existingAssets: Asset[]
+  packAssets: CityPackAsa[],
+  existingAssets: Asset[],
 ) {
-    const newAssetIndexes = packAssets.map((packAsset) => packAsset.id);
-    const existingAssetIndexes = existingAssets.map((asset) => asset.index);
+  const newAssetIndexes = packAssets.map((packAsset) => packAsset.id);
+  const existingAssetIndexes = existingAssets.map((asset) => asset.index);
 
-    const indexesToOptIn = [];
+  const indexesToOptIn = [];
 
-    for (const index of newAssetIndexes) {
-        if (!existingAssetIndexes.includes(index)) {
-            indexesToOptIn.push(index);
-        }
+  for (const index of newAssetIndexes) {
+    if (!existingAssetIndexes.includes(index)) {
+      indexesToOptIn.push(index);
     }
+  }
 
-    return indexesToOptIn;
+  return indexesToOptIn;
 }

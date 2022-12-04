@@ -16,54 +16,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import { indexerForChain } from "@/utils/algorand";
+import { ChainType } from '@/models/Chain';
+import { indexerForChain } from '@/utils/algorand';
 
 export default async function lookupInfluenceDepositTxns(
-    chain: ChainType,
-    address: string,
-    managerAddr: string
+  chain: ChainType,
+  address: string,
+  managerAddr: string,
 ): Promise<Record<string, any>[]> {
-    try {
-        // base64 encode string
-        const maxResults = 100;
-        const encodedPrefix = Buffer.from(`awe_${managerAddr}`).toString(
-            `base64`
-        );
-        let response = await indexerForChain(chain)
-            .lookupAccountTransactions(address)
-            .txType(`axfer`)
-            .notePrefix(encodedPrefix)
-            .limit(maxResults)
-            .do();
-        const txns = [];
+  try {
+    // base64 encode string
+    const maxResults = 100;
+    const encodedPrefix = Buffer.from(`awe_${managerAddr}`).toString(`base64`);
+    let response = await indexerForChain(chain)
+      .lookupAccountTransactions(address)
+      .txType(`axfer`)
+      .notePrefix(encodedPrefix)
+      .limit(maxResults)
+      .do();
+    const txns = [];
+
+    if (`transactions` in response && response[`transactions`].length > 0) {
+      txns.push(...response[`transactions`]);
+
+      while (`next-token` in response) {
+        response = await indexerForChain(chain)
+          .lookupAccountTransactions(address)
+          .txType(`axfer`)
+          .notePrefix(encodedPrefix)
+          .limit(maxResults)
+          .nextToken(response[`next-token`])
+          .do();
 
         if (`transactions` in response && response[`transactions`].length > 0) {
-            txns.push(...response[`transactions`]);
-
-            while (`next-token` in response) {
-                response = await indexerForChain(chain)
-                    .lookupAccountTransactions(address)
-                    .txType(`axfer`)
-                    .notePrefix(encodedPrefix)
-                    .limit(maxResults)
-                    .nextToken(response[`next-token`])
-                    .do();
-
-                if (
-                    `transactions` in response &&
-                    response[`transactions`].length > 0
-                ) {
-                    txns.push(...response[`transactions`]);
-                } else {
-                    continue;
-                }
-            }
+          txns.push(...response[`transactions`]);
+        } else {
+          continue;
         }
-        const user_txns = txns.filter((tx) => tx[`sender`] === address);
-
-        return user_txns;
-    } catch (e) {
-        return [];
+      }
     }
+    const user_txns = txns.filter((tx) => tx[`sender`] === address);
+
+    return user_txns;
+  } catch (e) {
+    return [];
+  }
 }

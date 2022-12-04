@@ -16,38 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 
-import { ChainType } from "@/models/Chain";
-import createAlgoExplorerUrl from "@/utils/createAlgoExplorerUrl";
-import AlgoExplorerUrlType from "@/models/AlgoExplorerUrlType";
+import { ChainType } from '@/models/Chain';
+import createAlgoExplorerUrl from '@/utils/createAlgoExplorerUrl';
+import AlgoExplorerUrlType from '@/models/AlgoExplorerUrlType';
 
 type Props = {
-    txId: string;
-    chain: ChainType;
-    customLabel?: string;
-    disabled?: boolean;
+  txId: string;
+  chain: ChainType;
+  customLabel?: string;
+  disabled?: boolean;
 };
 
 const ViewOnAlgoExplorerButton = ({
-    txId,
-    chain,
-    customLabel,
-    disabled,
+  txId,
+  chain,
+  customLabel,
+  disabled,
 }: Props) => {
-    return (
-        <Button
-            target={`_blank`}
-            disabled={disabled}
-            href={createAlgoExplorerUrl(
-                chain,
-                txId,
-                AlgoExplorerUrlType.Transaction
-            )}
-        >
-            {customLabel ? customLabel : `View on AlgoExplorer`}
-        </Button>
-    );
+  return (
+    <Button
+      target={`_blank`}
+      disabled={disabled}
+      href={createAlgoExplorerUrl(chain, txId, AlgoExplorerUrlType.Transaction)}
+    >
+      {customLabel ? customLabel : `View on AlgoExplorer`}
+    </Button>
+  );
 };
 
 export default ViewOnAlgoExplorerButton;

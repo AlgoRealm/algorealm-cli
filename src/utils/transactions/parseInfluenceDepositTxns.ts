@@ -16,38 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import { InfluenceDepositNote } from "@/models/InfluenceDepositNote";
-import getAssetTitle from "../assets/getAssetTitle";
+import { ChainType } from '@/models/Chain';
+import { InfluenceDepositNote } from '@/models/InfluenceDepositNote';
+import getAssetTitle from '../assets/getAssetTitle';
 
 export default async function parseInfluenceDepositTxns(
-    txns: Record<string, any>[],
-    chain: ChainType
+  txns: Record<string, any>[],
+  chain: ChainType,
 ): Promise<InfluenceDepositNote[]> {
-    const processedTxns: InfluenceDepositNote[] = [];
+  const processedTxns: InfluenceDepositNote[] = [];
 
-    for (const tx of txns) {
-        try {
-            const decodedNote = Buffer.from(tx[`note`], `base64`)
-                .toString(`utf8`)
-                .split(`_`);
-            const assetTitle = await getAssetTitle(
-                Number(decodedNote[2]),
-                chain
-            );
-            const noteContent = {
-                prefix: decodedNote[0],
-                receiver: decodedNote[1],
-                assetIndex: Number(decodedNote[2]),
-                assetTitle: assetTitle,
-                influenceDeposit: Number(decodedNote[3]),
-                noteId: decodedNote[4],
-            } as InfluenceDepositNote;
-            processedTxns.push(noteContent);
-        } catch (e) {
-            continue;
-        }
+  for (const tx of txns) {
+    try {
+      const decodedNote = Buffer.from(tx[`note`], `base64`)
+        .toString(`utf8`)
+        .split(`_`);
+      const assetTitle = await getAssetTitle(Number(decodedNote[2]), chain);
+      const noteContent = {
+        prefix: decodedNote[0],
+        receiver: decodedNote[1],
+        assetIndex: Number(decodedNote[2]),
+        assetTitle: assetTitle,
+        influenceDeposit: Number(decodedNote[3]),
+        noteId: decodedNote[4],
+      } as InfluenceDepositNote;
+      processedTxns.push(noteContent);
+    } catch (e) {
+      continue;
     }
+  }
 
-    return processedTxns;
+  return processedTxns;
 }

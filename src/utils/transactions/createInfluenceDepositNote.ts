@@ -17,10 +17,10 @@
  */
 
 export default function createInfluenceDepositNote(
-    managerAddr: string,
-    assetId: number,
-    influenceDeposit: number,
-    noteId: string
+  managerAddr: string,
+  assetId: number,
+  influenceDeposit: number,
+  noteId: string,
 ) {
-    return `awe_${managerAddr}_${assetId}_${influenceDeposit}_${noteId}`;
+  return `awe_${managerAddr}_${assetId}_${influenceDeposit}_${noteId}`;
 }

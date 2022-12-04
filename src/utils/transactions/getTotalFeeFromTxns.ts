@@ -16,22 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { TransactionToSign, TransactionToSignType } from "@/models/Transaction";
+import { TransactionToSign, TransactionToSignType } from '@/models/Transaction';
 
 export default function getTotalFeeFromTxns(txns: TransactionToSign[]) {
-    let totalAlgoFee = 0;
+  let totalAlgoFee = 0;
 
-    for (const txn of txns) {
-        totalAlgoFee += txn.transaction.fee;
+  for (const txn of txns) {
+    totalAlgoFee += txn.transaction.fee;
 
-        if (
-            (txn.type === TransactionToSignType.UserFeeTransaction ||
-                txn.type === TransactionToSignType.LsigFeeTransaction) &&
-            `amount` in txn.transaction
-        ) {
-            totalAlgoFee += Number(txn.transaction.amount);
-        }
+    if (
+      (txn.type === TransactionToSignType.UserFeeTransaction ||
+        txn.type === TransactionToSignType.LsigFeeTransaction) &&
+      `amount` in txn.transaction
+    ) {
+      totalAlgoFee += Number(txn.transaction.amount);
     }
+  }
 
-    return totalAlgoFee;
+  return totalAlgoFee;
 }

@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { TransactionToSign, TransactionToSignType } from "@/models/Transaction";
-import { Transaction, LogicSigAccount } from "algosdk";
+import { TransactionToSign, TransactionToSignType } from '@/models/Transaction';
+import { Transaction, LogicSigAccount } from 'algosdk';
 
 export default function createTransactionToSign(
-    transaction: Transaction,
-    signer: undefined | LogicSigAccount,
-    type: TransactionToSignType
+  transaction: Transaction,
+  signer: undefined | LogicSigAccount,
+  type: TransactionToSignType,
 ) {
-    return {
-        transaction: transaction,
-        signer: signer,
-        type: type,
-    } as TransactionToSign;
+  return {
+    transaction: transaction,
+    signer: signer,
+    type: type,
+  } as TransactionToSign;
 }

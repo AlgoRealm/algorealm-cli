@@ -17,72 +17,72 @@
  */
 
 import {
-    CITY_PACK_INCENTIVE_FEE,
-    CITY_PACK_INCENTIVE_WALLET,
-} from "@/common/constants";
-import { ChainType } from "@/models/Chain";
-import { CityPack } from "@/models/CityPack";
-import { TransactionToSignType } from "@/models/Transaction";
-import algosdk from "algosdk";
-import getLogicSign from "../accounts/getLogicSignature";
-import createTransactionToSign from "./createTransactionToSign";
-import getTransactionParams from "./getTransactionParams";
+  CITY_PACK_INCENTIVE_FEE,
+  CITY_PACK_INCENTIVE_WALLET,
+} from '@/common/constants';
+import { ChainType } from '@/models/Chain';
+import { CityPack } from '@/models/CityPack';
+import { TransactionToSignType } from '@/models/Transaction';
+import algosdk from 'algosdk';
+import getLogicSign from '../accounts/getLogicSignature';
+import createTransactionToSign from './createTransactionToSign';
+import getTransactionParams from './getTransactionParams';
 
 export default async function createPerformPackPurchaseTxns(
-    chain: ChainType,
-    userAddress: string,
-    pack: CityPack
+  chain: ChainType,
+  userAddress: string,
+  pack: CityPack,
 ) {
-    const suggestedParams = await getTransactionParams(chain);
+  const suggestedParams = await getTransactionParams(chain);
 
-    const escrowLsig = getLogicSign(pack.contract);
-    const txns = [];
-    const feeNote = `I am a asset transfer transaction to perform swap. thank you for using AlgoRealm! :-)`;
+  const escrowLsig = getLogicSign(pack.contract);
+  const txns = [];
+  const feeNote = `I am a asset transfer transaction to perform swap. thank you for using AlgoRealm! :-)`;
 
-    const incentiveFeeTxn = createTransactionToSign(
-        algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-            from: userAddress,
-            to: CITY_PACK_INCENTIVE_WALLET,
-            amount: CITY_PACK_INCENTIVE_FEE,
-            note: new Uint8Array(Buffer.from(feeNote)),
-            suggestedParams,
-        }),
-        undefined,
-        TransactionToSignType.UserFeeTransaction
+  const incentiveFeeTxn = createTransactionToSign(
+    algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      from: userAddress,
+      to: CITY_PACK_INCENTIVE_WALLET,
+      amount: CITY_PACK_INCENTIVE_FEE,
+      note: new Uint8Array(Buffer.from(feeNote)),
+      suggestedParams,
+    }),
+    undefined,
+    TransactionToSignType.UserFeeTransaction,
+  );
+  txns.push(incentiveFeeTxn);
+
+  const packPurchaseNote = `awe_pp_${pack.id}_${userAddress}`;
+
+  const requestedAlgoTxn = createTransactionToSign(
+    algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      from: userAddress,
+      to: pack.creator,
+      amount: pack.requested_algo_amount,
+      note: new Uint8Array(Buffer.from(packPurchaseNote)),
+      suggestedParams,
+    }),
+    undefined,
+    TransactionToSignType.UserTransaction,
+  );
+  txns.push(requestedAlgoTxn);
+
+  for (const asset of pack.offered_asas) {
+    const offeredAsaXferTxn = createTransactionToSign(
+      algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+        from: escrowLsig.address(),
+        to: userAddress,
+        amount: asset.amount * Math.pow(10, asset.decimals),
+        assetIndex: asset.id,
+        note: new Uint8Array(Buffer.from(feeNote)),
+        suggestedParams,
+      }),
+      escrowLsig,
+      TransactionToSignType.LsigTransaction,
     );
-    txns.push(incentiveFeeTxn);
 
-    const packPurchaseNote = `awe_pp_${pack.id}_${userAddress}`;
+    txns.push(offeredAsaXferTxn);
+  }
 
-    const requestedAlgoTxn = createTransactionToSign(
-        algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-            from: userAddress,
-            to: pack.creator,
-            amount: pack.requested_algo_amount,
-            note: new Uint8Array(Buffer.from(packPurchaseNote)),
-            suggestedParams,
-        }),
-        undefined,
-        TransactionToSignType.UserTransaction
-    );
-    txns.push(requestedAlgoTxn);
-
-    for (const asset of pack.offered_asas) {
-        const offeredAsaXferTxn = createTransactionToSign(
-            algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-                from: escrowLsig.address(),
-                to: userAddress,
-                amount: asset.amount * Math.pow(10, asset.decimals),
-                assetIndex: asset.id,
-                note: new Uint8Array(Buffer.from(feeNote)),
-                suggestedParams,
-            }),
-            escrowLsig,
-            TransactionToSignType.LsigTransaction
-        );
-
-        txns.push(offeredAsaXferTxn);
-    }
-
-    return txns;
+  return txns;
 }

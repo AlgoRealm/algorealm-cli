@@ -17,45 +17,45 @@
  */
 
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
-} from "@mui/material";
-import { INFO_DIALOG_CLOSE_BTN_ID, INFO_DIALOG_ID } from "./constants";
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from '@mui/material';
+import { INFO_DIALOG_CLOSE_BTN_ID, INFO_DIALOG_ID } from './constants';
 
 type Props = {
-    title: string;
-    children: React.ReactNode;
-    open: boolean;
-    setOpen: (open: boolean) => void;
-    onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onClose: () => void;
 };
 
 const InfoDialog = ({ title, children, open, setOpen, onClose }: Props) => {
-    return (
-        <Dialog
-            id={INFO_DIALOG_ID}
-            open={open}
-            onClose={() => setOpen(false)}
-            aria-labelledby="confirm-dialog"
+  return (
+    <Dialog
+      id={INFO_DIALOG_ID}
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="confirm-dialog"
+    >
+      <DialogTitle id="confirm-dialog">{title}</DialogTitle>
+      <DialogContent>{children}</DialogContent>
+      <DialogActions>
+        <Button
+          id={INFO_DIALOG_CLOSE_BTN_ID}
+          onClick={() => {
+            setOpen(false);
+            onClose();
+          }}
         >
-            <DialogTitle id="confirm-dialog">{title}</DialogTitle>
-            <DialogContent>{children}</DialogContent>
-            <DialogActions>
-                <Button
-                    id={INFO_DIALOG_CLOSE_BTN_ID}
-                    onClick={() => {
-                        setOpen(false);
-                        onClose();
-                    }}
-                >
-                    Close
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
 export default InfoDialog;

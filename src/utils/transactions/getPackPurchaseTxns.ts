@@ -16,70 +16,65 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { CITY_MANAGER_ADDRESS } from "@/common/constants";
-import { ChainType } from "@/models/Chain";
-import { indexerForChain } from "@/utils/algorand";
+import { CITY_MANAGER_ADDRESS } from '@/common/constants';
+import { ChainType } from '@/models/Chain';
+import { indexerForChain } from '@/utils/algorand';
 
 export default async function getPackPurchaseTxns(
-    chain: ChainType,
-    address?: string
+  chain: ChainType,
+  address?: string,
 ): Promise<Record<string, any>[]> {
-    try {
-        // base64 encode string
-        const maxResults = 100;
+  try {
+    // base64 encode string
+    const maxResults = 100;
 
-        const operation = `pp`;
-        const encodedPrefix = Buffer.from(`awe_${operation}_`).toString(
-            `base64`
-        );
+    const operation = `pp`;
+    const encodedPrefix = Buffer.from(`awe_${operation}_`).toString(`base64`);
 
-        let request = indexerForChain(chain)
-            .searchForTransactions()
-            .address(CITY_MANAGER_ADDRESS)
-            .txType(`pay`)
-            .notePrefix(encodedPrefix)
-            .limit(maxResults);
+    let request = indexerForChain(chain)
+      .searchForTransactions()
+      .address(CITY_MANAGER_ADDRESS)
+      .txType(`pay`)
+      .notePrefix(encodedPrefix)
+      .limit(maxResults);
+
+    if (address) {
+      request = request.address(address);
+    }
+
+    let response = await request.do();
+
+    const txns = [];
+
+    if (`transactions` in response && response[`transactions`].length > 0) {
+      txns.push(...response[`transactions`]);
+
+      while (`next-token` in response) {
+        response = indexerForChain(chain)
+          .searchForTransactions()
+          .address(CITY_MANAGER_ADDRESS)
+          .txType(`pay`)
+          .notePrefix(encodedPrefix)
+          .limit(maxResults)
+          .nextToken(response[`next-token`]);
 
         if (address) {
-            request = request.address(address);
+          response = response.address(address);
         }
 
-        let response = await request.do();
-
-        const txns = [];
+        response = await response.do();
 
         if (`transactions` in response && response[`transactions`].length > 0) {
-            txns.push(...response[`transactions`]);
-
-            while (`next-token` in response) {
-                response = indexerForChain(chain)
-                    .searchForTransactions()
-                    .address(CITY_MANAGER_ADDRESS)
-                    .txType(`pay`)
-                    .notePrefix(encodedPrefix)
-                    .limit(maxResults)
-                    .nextToken(response[`next-token`]);
-
-                if (address) {
-                    response = response.address(address);
-                }
-
-                response = await response.do();
-
-                if (
-                    `transactions` in response &&
-                    response[`transactions`].length > 0
-                ) {
-                    txns.push(...response[`transactions`]);
-                } else {
-                    continue;
-                }
-            }
+          txns.push(...response[`transactions`]);
+        } else {
+          continue;
         }
-
-        console.log(txns);
-        return txns;
-    } catch (e) {
-        return [];
+      }
     }
+
+    console.log(txns);
+    return txns;
+  } catch (e) {
+    return [];
+  }
 }

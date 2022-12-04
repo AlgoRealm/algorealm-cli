@@ -16,57 +16,51 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
-import { LoadingIndicator } from "@/models/LoadingIndicator";
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+import { LoadingIndicator } from '@/models/LoadingIndicator';
 
 const initialState = {
-    isWalletPopupOpen: false,
-    isDepositInfluencePopupOpen: false,
-    isAboutPopupOpen: false,
-    loadingIndicator: {
-        isLoading: false,
-        message: undefined,
-    } as LoadingIndicator,
-    theme: `dark`,
+  isWalletPopupOpen: false,
+  isDepositInfluencePopupOpen: false,
+  isAboutPopupOpen: false,
+  loadingIndicator: {
+    isLoading: false,
+    message: undefined,
+  } as LoadingIndicator,
+  theme: `dark`,
 };
 
 export const applicationSlice = createSlice({
-    name: `application`,
-    initialState,
-    reducers: {
-        setIsWalletPopupOpen: (state, action: PayloadAction<boolean>) => {
-            state.isWalletPopupOpen = action.payload;
-        },
-        setLoadingIndicator: (
-            state,
-            action: PayloadAction<LoadingIndicator>
-        ) => {
-            state.loadingIndicator = action.payload;
-        },
-        setIsDepositInfluencePopupOpen: (
-            state,
-            action: PayloadAction<boolean>
-        ) => {
-            state.isDepositInfluencePopupOpen = action.payload;
-        },
-        setIsAboutPopupOpen: (state, action: PayloadAction<boolean>) => {
-            state.isAboutPopupOpen = action.payload;
-        },
-        setTheme: (
-            state: Draft<typeof initialState>,
-            action: PayloadAction<typeof initialState>
-        ) => {
-            state.theme = action.payload.theme;
-        },
+  name: `application`,
+  initialState,
+  reducers: {
+    setIsWalletPopupOpen: (state, action: PayloadAction<boolean>) => {
+      state.isWalletPopupOpen = action.payload;
     },
+    setLoadingIndicator: (state, action: PayloadAction<LoadingIndicator>) => {
+      state.loadingIndicator = action.payload;
+    },
+    setIsDepositInfluencePopupOpen: (state, action: PayloadAction<boolean>) => {
+      state.isDepositInfluencePopupOpen = action.payload;
+    },
+    setIsAboutPopupOpen: (state, action: PayloadAction<boolean>) => {
+      state.isAboutPopupOpen = action.payload;
+    },
+    setTheme: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState>,
+    ) => {
+      state.theme = action.payload.theme;
+    },
+  },
 });
 
 export const {
-    setIsWalletPopupOpen,
-    setIsDepositInfluencePopupOpen,
-    setIsAboutPopupOpen,
-    setLoadingIndicator,
-    setTheme,
+  setIsWalletPopupOpen,
+  setIsDepositInfluencePopupOpen,
+  setIsAboutPopupOpen,
+  setLoadingIndicator,
+  setTheme,
 } = applicationSlice.actions;
 
 export default applicationSlice.reducer;

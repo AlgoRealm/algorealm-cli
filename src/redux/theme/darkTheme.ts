@@ -16,38 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { createTheme } from "@mui/material";
+import { createTheme } from '@mui/material';
 
 /* istanbul ignore next */
 const darkTheme = createTheme({
-    palette: {
-        mode: `dark`,
-        primary: {
-            main: `#ffffff`,
-        },
-        secondary: {
-            main: `#ff80bf`,
-        },
-        background: {
-            default: `#000000`,
-            paper: `#000000`,
-        },
-        text: {
-            primary: `#f8f8f2`,
-        },
-        error: {
-            main: `#FF9580`,
-        },
-        warning: {
-            main: `#FFFF80`,
-        },
-        info: {
-            main: `#80FFEA`,
-        },
-        success: {
-            main: `#8aff80`,
-        },
+  palette: {
+    mode: `dark`,
+    primary: {
+      main: `#ffffff`,
     },
+    secondary: {
+      main: `#ff80bf`,
+    },
+    background: {
+      default: `#000000`,
+      paper: `#000000`,
+    },
+    text: {
+      primary: `#f8f8f2`,
+    },
+    error: {
+      main: `#FF9580`,
+    },
+    warning: {
+      main: `#FFFF80`,
+    },
+    info: {
+      main: `#80FFEA`,
+    },
+    success: {
+      main: `#8aff80`,
+    },
+  },
 });
 
 export default darkTheme;

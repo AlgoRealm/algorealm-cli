@@ -16,66 +16,66 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { ButtonBase, CardMedia } from "@mui/material";
-import { CityPack } from "@/models/CityPack";
-import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
-import { stringToHexColor } from "@/utils/stringToHexColor";
-import { setIsWalletPopupOpen } from "@/redux/slices/applicationSlice";
-import { CITY_PACK_IMAGE_URL } from "@/common/constants";
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { ButtonBase, CardMedia } from '@mui/material';
+import { CityPack } from '@/models/CityPack';
+import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
+import { stringToHexColor } from '@/utils/stringToHexColor';
+import { setIsWalletPopupOpen } from '@/redux/slices/applicationSlice';
+import { CITY_PACK_IMAGE_URL } from '@/common/constants';
 
 type Props = {
-    pack: CityPack;
-    purchaseClicked: (pack: CityPack) => void;
+  pack: CityPack;
+  purchaseClicked: (pack: CityPack) => void;
 };
 
 const PackCard = ({ pack, purchaseClicked }: Props) => {
-    const { address, gateway } = useAppSelector((state) => state.walletConnect);
-    const dispatch = useAppDispatch();
+  const { address, gateway } = useAppSelector((state) => state.walletConnect);
+  const dispatch = useAppDispatch();
 
-    return (
-        <Card
-            sx={{
-                height: `100%`,
-                display: `flex`,
-                flexDirection: `column`,
-            }}
-        >
-            <ButtonBase
-                sx={{ display: `block`, textAlign: `initial` }}
-                onClick={() => {
-                    address
-                        ? purchaseClicked(pack)
-                        : dispatch(setIsWalletPopupOpen(true));
-                }}
-            >
-                <CardMedia
-                    component={`img`}
-                    sx={{
-                        backgroundColor: `${stringToHexColor(pack.escrow)}`,
-                    }}
-                    image={CITY_PACK_IMAGE_URL(gateway)}
-                    alt="random"
-                />
-                <CardContent sx={{ flexGrow: 1, textAlign: `center` }}>
-                    <Typography
-                        sx={{ fontWeight: `bold` }}
-                        gutterBottom
-                        variant="h5"
-                        component="h2"
-                    >
-                        {pack.title}
-                    </Typography>
-                    <Typography>{`Price: ${
-                        pack.requested_algo_amount / 1e6
-                    } Algo`}</Typography>
-                </CardContent>
-            </ButtonBase>
-        </Card>
-    );
+  return (
+    <Card
+      sx={{
+        height: `100%`,
+        display: `flex`,
+        flexDirection: `column`,
+      }}
+    >
+      <ButtonBase
+        sx={{ display: `block`, textAlign: `initial` }}
+        onClick={() => {
+          address
+            ? purchaseClicked(pack)
+            : dispatch(setIsWalletPopupOpen(true));
+        }}
+      >
+        <CardMedia
+          component={`img`}
+          sx={{
+            backgroundColor: `${stringToHexColor(pack.escrow)}`,
+          }}
+          image={CITY_PACK_IMAGE_URL(gateway)}
+          alt="random"
+        />
+        <CardContent sx={{ flexGrow: 1, textAlign: `center` }}>
+          <Typography
+            sx={{ fontWeight: `bold` }}
+            gutterBottom
+            variant="h5"
+            component="h2"
+          >
+            {pack.title}
+          </Typography>
+          <Typography>{`Price: ${
+            pack.requested_algo_amount / 1e6
+          } Algo`}</Typography>
+        </CardContent>
+      </ButtonBase>
+    </Card>
+  );
 };
 
 export default PackCard;

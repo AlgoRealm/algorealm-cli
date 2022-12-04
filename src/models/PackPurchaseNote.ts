@@ -17,9 +17,9 @@
  */
 
 export type PackPurchaseNote = {
-    prefix: string;
-    operation: string;
-    packId: number;
-    buyerAddress: string;
-    txId: string;
+  prefix: string;
+  operation: string;
+  packId: number;
+  buyerAddress: string;
+  txId: string;
 };

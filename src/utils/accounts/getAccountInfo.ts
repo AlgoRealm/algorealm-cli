@@ -16,19 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import { indexerForChain } from "../algorand";
+import { ChainType } from '@/models/Chain';
+import { indexerForChain } from '../algorand';
 
 export default async function getAccountInfo(
-    chain: ChainType,
-    account: string
+  chain: ChainType,
+  account: string,
 ) {
-    try {
-        const response = await indexerForChain(chain)
-            .lookupAccountByID(account)
-            .do();
-        return response;
-    } catch (e) {
-        return undefined;
-    }
+  try {
+    const response = await indexerForChain(chain)
+      .lookupAccountByID(account)
+      .do();
+    return response;
+  } catch (e) {
+    return undefined;
+  }
 }

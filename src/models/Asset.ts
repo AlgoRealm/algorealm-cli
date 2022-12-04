@@ -17,19 +17,19 @@
  */
 
 export type Asset = {
-    index: number;
-    creator: string;
-    name: string;
-    imageUrl: string;
-    decimals: number;
-    unitName: string;
-    amount: number;
-    frozen: boolean;
-    offeringAmount: number;
-    requestingAmount: number;
+  index: number;
+  creator: string;
+  name: string;
+  imageUrl: string;
+  decimals: number;
+  unitName: string;
+  amount: number;
+  frozen: boolean;
+  offeringAmount: number;
+  requestingAmount: number;
 };
 
 export type AssetWithBalance = Asset & {
-    escrowAddress: string;
-    balance: number;
+  escrowAddress: string;
+  balance: number;
 };

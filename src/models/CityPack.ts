@@ -17,28 +17,28 @@
  */
 
 export enum CityPackType {
-    Available = `available`,
-    Purchased = `purchased`,
+  Available = `available`,
+  Purchased = `purchased`,
 }
 
 export type CityPackAsa = {
-    id: number;
-    amount: number;
-    decimals: number;
-    title: string;
-    url: string;
+  id: number;
+  amount: number;
+  decimals: number;
+  title: string;
+  url: string;
 };
 
 export type CityPack = {
-    id: number;
-    creator: string;
-    escrow: string;
-    contract: string;
-    title: string;
-    offered_asas: [CityPackAsa];
-    requested_algo_amount: number;
-    requested_algo_wallet: string;
-    is_active: boolean;
-    is_closed: boolean;
-    last_swap_tx: string;
+  id: number;
+  creator: string;
+  escrow: string;
+  contract: string;
+  title: string;
+  offered_asas: [CityPackAsa];
+  requested_algo_amount: number;
+  requested_algo_wallet: string;
+  is_active: boolean;
+  is_closed: boolean;
+  last_swap_tx: string;
 };

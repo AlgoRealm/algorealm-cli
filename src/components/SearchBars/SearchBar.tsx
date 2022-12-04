@@ -16,49 +16,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IconButton, InputBase, Paper } from "@mui/material";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { IconButton, InputBase, Paper } from '@mui/material';
+import { useMediaQuery, useTheme } from '@mui/material';
 
-import ClearIcon from "@mui/icons-material/Clear";
+import ClearIcon from '@mui/icons-material/Clear';
 
 type Props = {
-    value: string;
-    onValueChange: (value: string) => void;
-    placeholder?: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  placeholder?: string;
 };
 
 const SearchBar = ({ value, onValueChange, placeholder }: Props) => {
-    const theme = useTheme();
-    const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
 
-    return (
-        <Paper
-            component="form"
-            elevation={3}
-            sx={{
-                width: largeScreen ? `90%` : `100%`,
-                display: `flex`,
-                alignItems: `center`,
-                bgcolor: `background.default`,
-            }}
-        >
-            <InputBase
-                sx={{ ml: 2, flex: 1 }}
-                value={value}
-                onChange={(e) => onValueChange(e.target.value)}
-                placeholder={placeholder ?? `Type to search`}
-            />
-            <IconButton
-                disabled={!value}
-                type="submit"
-                sx={{ p: `10px` }}
-                aria-label="search"
-                onClick={() => onValueChange(``)}
-            >
-                <ClearIcon />
-            </IconButton>
-        </Paper>
-    );
+  return (
+    <Paper
+      component="form"
+      elevation={3}
+      sx={{
+        width: largeScreen ? `90%` : `100%`,
+        display: `flex`,
+        alignItems: `center`,
+        bgcolor: `background.default`,
+      }}
+    >
+      <InputBase
+        sx={{ ml: 2, flex: 1 }}
+        value={value}
+        onChange={(e) => onValueChange(e.target.value)}
+        placeholder={placeholder ?? `Type to search`}
+      />
+      <IconButton
+        disabled={!value}
+        type="submit"
+        sx={{ p: `10px` }}
+        aria-label="search"
+        onClick={() => onValueChange(``)}
+      >
+        <ClearIcon />
+      </IconButton>
+    </Paper>
+  );
 };
 
 export default SearchBar;

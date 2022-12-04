@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { IpfsGateway } from "@/models/Gateway";
+import { IpfsGateway } from '@/models/Gateway';
 
 export const ipfsToProxyUrl = (ipfsUrl: string, gateway: IpfsGateway) => {
-    return ipfsUrl.includes(`ipfs://`)
-        ? `https://${gateway}/ipfs/${ipfsUrl.split(`ipfs://`)[1]}`
-        : ipfsUrl;
+  return ipfsUrl.includes(`ipfs://`)
+    ? `https://${gateway}/ipfs/${ipfsUrl.split(`ipfs://`)[1]}`
+    : ipfsUrl;
 };

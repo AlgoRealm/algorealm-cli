@@ -17,17 +17,17 @@
  */
 
 interface Dictionary<T> {
-    [Key: string]: T;
+  [Key: string]: T;
 }
 
 export type AlgoWorldAsset = {
-    index: number;
-    name: string;
-    url: string;
-    details?: Dictionary<string>;
+  index: number;
+  name: string;
+  url: string;
+  details?: Dictionary<string>;
 };
 
 export type AlgoWorldCityAsset = AlgoWorldAsset & {
-    influence: number;
-    status: string;
+  influence: number;
+  status: string;
 };

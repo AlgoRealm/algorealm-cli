@@ -16,19 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { setLoadingIndicator } from "../slices/applicationSlice";
-import { useAppDispatch } from "../store/hooks";
+import { setLoadingIndicator } from '../slices/applicationSlice';
+import { useAppDispatch } from '../store/hooks';
 
 export default function useLoadingIndicator() {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-    const setLoading = (message: string) => {
-        dispatch(setLoadingIndicator({ isLoading: true, message: message }));
-    };
+  const setLoading = (message: string) => {
+    dispatch(setLoadingIndicator({ isLoading: true, message: message }));
+  };
 
-    const resetLoading = () => {
-        dispatch(setLoadingIndicator({ isLoading: false, message: undefined }));
-    };
+  const resetLoading = () => {
+    dispatch(setLoadingIndicator({ isLoading: false, message: undefined }));
+  };
 
-    return { setLoading, resetLoading };
+  return { setLoading, resetLoading };
 }

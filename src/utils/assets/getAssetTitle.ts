@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ChainType } from "@/models/Chain";
-import { indexerForChain } from "@/utils/algorand";
+import { ChainType } from '@/models/Chain';
+import { indexerForChain } from '@/utils/algorand';
 
 export default async function getAssetTitle(
-    index: number,
-    chain: ChainType
+  index: number,
+  chain: ChainType,
 ): Promise<string> {
-    try {
-        const response = await indexerForChain(chain)
-            .lookupAssetByID(index)
-            .do();
-        return response.asset.params.name;
-    } catch (e) {
-        return `N/a`;
-    }
+  try {
+    const response = await indexerForChain(chain).lookupAssetByID(index).do();
+    return response.asset.params.name;
+  } catch (e) {
+    return `N/a`;
+  }
 }

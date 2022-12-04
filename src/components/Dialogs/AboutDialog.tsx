@@ -16,60 +16,57 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import pJson from "@/package.json";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import pJson from '@/package.json';
 
 type Props = {
-    open: boolean;
-    changeState: (open: boolean) => void;
+  open: boolean;
+  changeState: (open: boolean) => void;
 };
 
 export default function AboutDialog({ open, changeState }: Props) {
-    const descriptionElementRef = React.useRef<HTMLElement>(null);
-    React.useEffect(() => {
-        if (open) {
-            const { current: descriptionElement } = descriptionElementRef;
-            if (descriptionElement !== null) {
-                descriptionElement.focus();
-            }
-        }
-    }, [open]);
+  const descriptionElementRef = React.useRef<HTMLElement>(null);
+  React.useEffect(() => {
+    if (open) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
+  }, [open]);
 
-    return (
-        <div>
-            <Dialog
-                open={open}
-                scroll={`paper`}
-                aria-labelledby="scroll-dialog-title"
-                aria-describedby="scroll-dialog-description"
-            >
-                <DialogTitle color={`primary`} id="scroll-dialog-title">
-                    {`AlgoRealm v${pJson.version}`}
-                </DialogTitle>
-                <DialogContent dividers={true}>
-                    <DialogContentText
-                        ref={descriptionElementRef}
-                        tabIndex={-1}
-                    >
-                        {`AlgoRealm is a free and open-source NFT explorer built for AlgoWorld NFT community. Distributed under GPLv3 license.`}
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={() => {
-                            changeState(false);
-                        }}
-                    >
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
+  return (
+    <div>
+      <Dialog
+        open={open}
+        scroll={`paper`}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
+        <DialogTitle color={`primary`} id="scroll-dialog-title">
+          {`AlgoRealm v${pJson.version}`}
+        </DialogTitle>
+        <DialogContent dividers={true}>
+          <DialogContentText ref={descriptionElementRef} tabIndex={-1}>
+            {`AlgoRealm is a free and open-source NFT explorer built for AlgoWorld NFT community. Distributed under GPLv3 license.`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              changeState(false);
+            }}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }

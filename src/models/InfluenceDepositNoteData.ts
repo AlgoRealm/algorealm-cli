@@ -17,14 +17,14 @@
  */
 
 export type GithubInfluenceData = {
-    acfgTxn: string;
-    assetIndex: number;
-    assetTitle: string;
-    block: number | string;
-    deposit: number;
-    noteId: string;
-    influence: number | string;
-    senderAddress: string;
+  acfgTxn: string;
+  assetIndex: number;
+  assetTitle: string;
+  block: number | string;
+  deposit: number;
+  noteId: string;
+  influence: number | string;
+  senderAddress: string;
 };
 
 export type InfluenceDepositNoteData = { [key: string]: GithubInfluenceData };

@@ -17,10 +17,10 @@
  */
 
 export type InfluenceDepositNote = {
-    prefix: string;
-    receiver: string;
-    assetIndex: number;
-    assetTitle: string;
-    influenceDeposit: number;
-    noteId: string;
+  prefix: string;
+  receiver: string;
+  assetIndex: number;
+  assetTitle: string;
+  influenceDeposit: number;
+  noteId: string;
 };
