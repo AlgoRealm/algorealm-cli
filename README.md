@@ -1,4 +1,4 @@
-<p align="center"><a  href="https://github.com/cusma/algorealm"><img  width=100%  src="https://ipfs.algonode.xyz/ipfs/bafybeicqjdrwufixgun4quyble4kkvojouo3dnijuexx4wtnmt23p3dxeq"  border="0" /></a></p>
+<p align="center"><a  href="https://github.com/cusma/algorealm"><img  width=100%  src="https://ipfs.algonode.xyz/ipfs/bafkreifsrjpzws5m6hwp37uyppzoin5nags4cckfvfrzzgjlkwsmtrdcbi"  border="0" /></a></p>
 
 <p align="center">
     <a href="https://algorand.com"><img src="https://img.shields.io/badge/Powered by-Algorand-black.svg" /></a>
