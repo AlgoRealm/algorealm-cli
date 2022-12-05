@@ -1,5 +1,5 @@
 import { TransactionToSign } from '@/models/Transaction';
-import { AlgoWorldWallet, WalletType } from '@/models/Wallet';
+import { AlgoRealmWallet, WalletType } from '@/models/Wallet';
 import {
   assignGroupID,
   LogicSigAccount,
@@ -9,7 +9,7 @@ import MnemonicClient from './mnemonic';
 import WalletConnectClient, { WalletConnectSingleton } from './walletConnect';
 
 export default class WalletManager {
-  private client: AlgoWorldWallet | undefined;
+  private client: AlgoRealmWallet | undefined;
 
   public setWalletClient = (walletType: WalletType, phrase?: string) => {
     if (walletType === WalletType.PeraWallet) {
@@ -71,7 +71,7 @@ export default class WalletManager {
     }
   };
 
-  public getWalletClient = (): AlgoWorldWallet => {
+  public getWalletClient = (): AlgoRealmWallet => {
     if (this.client) {
       return this.client;
     } else {

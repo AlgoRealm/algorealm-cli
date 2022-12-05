@@ -1,6 +1,6 @@
 /**
  * AlgoRealm
- * Copyright (C) 2022 AlgoWorld
+ * Copyright (C) 2022 AlgoRealm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,16 @@ import { Container } from '@mui/material';
 import PageHeader from '@/components/Headers/PageHeader';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import Terminal from 'react-console-emulator';
-import { PeraWalletConnect } from '@perawallet/connect';
 import { ellipseAddress } from '@/utils/ellipseAddress';
-import { useSnackbar } from 'notistack';
-import { indexerForChain } from '@/utils/algorand';
 import { ChainType } from '@/models/Chain';
-import { getAlgoRealmHistory } from '@/utils/getAlgoRealmHistory';
-import { getAlgoRealmCalls } from '@/utils/getAlgoRealmCalls';
+import { getAlgoRealmHistory } from '@/utils/transactions/getAlgoRealmHistory';
+import { getAlgoRealmCalls } from '@/utils/transactions/getAlgoRealmCalls';
 import {
   ALGOREALM_CROWN_ID,
   ALGOREALM_POEM,
+  ALGOREALM_SCEPTRE_ID,
   CONNECTED_WALLET_TYPE,
 } from '@/common/constants';
-import { optInAsset } from '@/utils/optInAsset';
 import { ConnectContext } from '@/redux/store/connector';
 import { WalletType } from '@/models/Wallet';
 import {
@@ -41,11 +38,19 @@ import {
   switchChain,
 } from '@/redux/slices/walletConnectSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
+import { optAssets } from '@/redux/slices/walletConnectSlice';
+import { getClaimAssetTxns } from '@/utils/transactions/getClaimAssetTxns';
+import submitTransactions from '@/utils/transactions/submitTransactions';
+import { hasAsset } from '@/utils/assets/hasAsset';
 
 const Console = () => {
   const dispatch = useAppDispatch();
-  const { enqueueSnackbar } = useSnackbar();
   const connector = useContext(ConnectContext);
+  const [isConnected, setIsConnected] = useState(false);
+
+  const { address, gateway, chain, assets } = useAppSelector(
+    (state) => state.walletConnect,
+  );
 
   const connect = useCallback(
     async (
@@ -68,6 +73,8 @@ const Console = () => {
         connector.setWalletClient(clientType, phrase);
         await connector.connect();
       }
+
+      setIsConnected(true);
     },
     [connector, dispatch],
   );
@@ -76,14 +83,16 @@ const Console = () => {
     await connector
       .disconnect()
       .catch((err: { message: any }) => console.error(err.message));
+
+    setIsConnected(false);
   };
 
   const loadHistory = async () => {
     const attempts = 1;
-    let algoRealmCalls = [];
+    let algoRealmCalls = [] as Record<string, any>[];
     while (attempts <= 5) {
       try {
-        algoRealmCalls = await getAlgoRealmCalls();
+        algoRealmCalls = await getAlgoRealmCalls(chain);
         break;
       } catch (e) {
         console.log(e);
@@ -92,10 +101,6 @@ const Console = () => {
 
     return getAlgoRealmHistory(algoRealmCalls);
   };
-
-  const { address, gateway, chain } = useAppSelector(
-    (state) => state.walletConnect,
-  );
 
   const commands = {
     about: {
@@ -117,22 +122,102 @@ const Console = () => {
         return ALGOREALM_POEM;
       },
     },
+    'change-chain': {
+      description: `Change chain`,
+      usage: `change-chain mainnet|testnet`,
+      fn: (chain: ChainType) => {
+        dispatch(switchChain(chain));
+        return `Chain changed to ${chain}`;
+      },
+    },
     'claim-crown': {
       description: `Claim the Crown of Entropy, become the Randomic Majesty of Algorand.`,
       usage: `claim-crown <majesty-name> <algos>`,
-      fn: async (...args) => {
+      fn: async (...args: string[] | any[]) => {
         if (args.length !== 2) {
           return `Invalid number of arguments. Expected 2, got ${args.length}.`;
         }
 
         const majestyName = args[0];
-        const algos = Number(args[1]);
+        const algos = Number(args[1]) * 1e6;
 
         if (!connector.connected) {
           return `You must connect to PeraWallet to claim the Crown of Entropy.`;
         }
 
-        return optInAsset(address, ALGOREALM_CROWN_ID, peraWallet);
+        if (hasAsset(ALGOREALM_CROWN_ID(chain), assets)) {
+          await dispatch(
+            optAssets({
+              assetIndexes: [ALGOREALM_CROWN_ID(chain)],
+              gateway,
+              connector,
+            }),
+          );
+        }
+
+        const claimTxns = await getClaimAssetTxns(
+          chain,
+          address,
+          ALGOREALM_CROWN_ID(chain),
+          `Crown`,
+          majestyName,
+          algos,
+        );
+
+        const signedTxns = await connector.signTransactions(claimTxns);
+
+        if (!signedTxns) {
+          return undefined;
+        }
+
+        const txnResponse = await submitTransactions(chain, signedTxns);
+
+        return `Transactions ${txnResponse.txId} performed. 👑 Glory to ${majestyName}, the Randomic Majesty of Algorand! 🎉`;
+      },
+    },
+    'claim-sceptre': {
+      description: `Claim the Sceptre of Proof, become the Verifiable Majesty of Algorand`,
+      usage: `claim-sceptre <majesty-name> <algos>`,
+      fn: async (...args: string[] | any[]) => {
+        if (args.length !== 2) {
+          return `Invalid number of arguments. Expected 2, got ${args.length}.`;
+        }
+
+        const majestyName = args[0];
+        const algos = Number(args[1]) * 1e6;
+
+        if (!connector.connected) {
+          return `You must connect to PeraWallet to claim the Sceptre of Proof.`;
+        }
+
+        if (!hasAsset(ALGOREALM_SCEPTRE_ID(chain), assets)) {
+          await dispatch(
+            optAssets({
+              assetIndexes: [ALGOREALM_SCEPTRE_ID(chain)],
+              gateway,
+              connector,
+            }),
+          );
+        }
+
+        const claimTxns = await getClaimAssetTxns(
+          chain,
+          address,
+          ALGOREALM_SCEPTRE_ID(chain),
+          `Crown`,
+          majestyName,
+          algos,
+        );
+
+        const signedTxns = await connector.signTransactions(claimTxns);
+
+        if (!signedTxns) {
+          return undefined;
+        }
+
+        const txnResponse = await submitTransactions(chain, signedTxns);
+
+        return `Transactions ${txnResponse.txId} performed. 👑 Glory to ${majestyName}, the Verifiable Majesty of Algorand! 🎉`;
       },
     },
     login: {
@@ -152,7 +237,7 @@ const Console = () => {
       description: `Logout from PeraWallet`,
       fn: () => {
         if (!connector.connected) {
-          return `You are already logged out: ${ellipseAddress(address, 4)}`;
+          return `You are already logged out!`;
         }
         disconnect();
       },
@@ -160,8 +245,10 @@ const Console = () => {
   };
 
   const customPromptLabel = useMemo(() => {
-    return address ? `(${ellipseAddress(address, 4)})$➜` : `➜`;
-  }, [address]);
+    return isConnected
+      ? `(${ellipseAddress(address, 4)})|${chain}$➜`
+      : `[${chain}]$➜`;
+  }, [address, chain, isConnected]);
 
   useEffect(() => {
     const changeChain = (chain: ChainType) => {
@@ -198,7 +285,7 @@ const Console = () => {
         description="Claim the Crown and the Sceptre of Algorand Realm (CLI Emulator Edition)"
       />
 
-      <Container component="main" sx={{ pt: 10 }}>
+      <Container component="main" sx={{ pt: 5 }}>
         <Terminal
           style={{
             backgroundColor: `#222222`,
@@ -207,7 +294,7 @@ const Console = () => {
           promptLabelStyle={{ color: `#FFFFFF` }} // Prompt label colour
           inputTextStyle={{ color: `white` }} // Prompt text colour
           commands={commands}
-          welcomeMessage={`Welcome to the AlgoRealm v0.1.0 👑 [mainnet ⚠️] `}
+          welcomeMessage={`Welcome to the AlgoRealm v0.1.0 👑`}
           promptLabel={customPromptLabel}
         />
       </Container>

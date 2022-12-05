@@ -24,11 +24,8 @@ const moduleExports = {
       'images.unsplash.com',
       'vitals.vercel-insights.com',
       'google-analytics.com',
-      'algoworld-nft.com',
-      'glitchtip.com',
       'ipfs.io',
       'ipfs.algonode.xyz',
-      'jsonkeeper.com',
     ],
   },
 };

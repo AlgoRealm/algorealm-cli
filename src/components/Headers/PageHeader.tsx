@@ -1,6 +1,6 @@
 /**
- * AlgoRealm
- * Copyright (C) 2022 AlgoWorld
+ * AlgoRealm UI
+ * Copyright (C) 2022 AlgoRealm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { DEFAULT_PAGE_HEADER_ID } from './constants';
 
 type Props = {
   title: string;
@@ -28,20 +27,14 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const PageHeader = ({
-  title,
-  description,
-  id = DEFAULT_PAGE_HEADER_ID,
-  children,
-}: Props) => {
+const PageHeader = ({ title, description, children }: Props) => {
   return (
     <Container
-      id={id}
       component="main"
       maxWidth="sm"
       sx={{
         pt: 5,
-        pb: 2,
+        pb: 5,
       }}
     >
       <Typography

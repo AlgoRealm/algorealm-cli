@@ -1,6 +1,6 @@
 /**
  * AlgoRealm
- * Copyright (C) 2022 AlgoWorld
+ * Copyright (C) 2022 AlgoRealm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,11 +53,11 @@ export default function MyApp(props: MyAppProps) {
         />
         <meta
           name="description"
-          content="⚡️ Free and open-source NFT explorer built for AlgoWorld NFT community. Distributed under GPLv3 license. Powered by Algorand."
+          content="⚡️ Free and open-source CLI emulator game built for AlgoRealm game. Distributed under GPLv3 license. Powered by Algorand."
         />
         <meta
           name="keywords"
-          content="Algorand, AlgoWorld, Explorer, ASA, NFT, Blockchain"
+          content="Algorand, AlgoRealm, Game, ASA, NFT, Blockchain"
         />
         <title>AlgoRealm</title>
 

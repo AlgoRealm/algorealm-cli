@@ -1,6 +1,6 @@
 /**
  * AlgoRealm
- * Copyright (C) 2022 AlgoWorld
+ * Copyright (C) 2022 AlgoRealm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { CHAIN_TYPE, EMPTY_ASSET_IMAGE_URL } from '@/common/constants';
+import { CHAIN_TYPE } from '@/common/constants';
 import { Asset } from '@/models/Asset';
 import { ChainType } from '@/models/Chain';
 import getAssetsForAccount from '@/utils/accounts/getAssetsForAccount';
@@ -28,12 +28,8 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { RootState } from '@/redux/store';
-import optAssets from '@/utils/assets/optAssets';
+import optAssetsForAccount from '@/utils/assets/optAssetsForAccount';
 import WalletManager from '@/wallets/walletManager';
-import { AlgoWorldCityAsset } from '@/models/AlgoWorldAsset';
-import lookupInfluenceDepositTxns from '@/utils/transactions/lookupInfluenceDepositTxns';
-import parseInfluenceDepositTxns from '@/utils/transactions/parseInfluenceDepositTxns';
-import { InfluenceDepositNote } from '@/models/InfluenceDepositNote';
 import { IpfsGateway } from '@/models/Gateway';
 
 interface WalletConnectState {
@@ -42,10 +38,6 @@ interface WalletConnectState {
   address: string;
   assets: Asset[];
   fetchingAccountAssets: boolean;
-  fetchingInfluenceTxnNotes: boolean;
-  influenceTxnNotes: InfluenceDepositNote[];
-  fetchingPackPurchaseTxns: boolean;
-  selectedDepositAsset: AlgoWorldCityAsset | undefined;
   gateway: IpfsGateway;
 }
 
@@ -61,15 +53,11 @@ const initialState = {
       decimals: 6,
       offeringAmount: 0,
       requestingAmount: 0,
-      imageUrl: EMPTY_ASSET_IMAGE_URL(IpfsGateway.ALGONODE_IO),
+      imageUrl: ``,
       name: `Algo`,
       unitName: `Algo`,
     },
   ],
-  influenceTxnNotes: [],
-  fetchingInfluenceTxnNotes: false,
-  fetchingPackPurchaseTxns: false,
-  selectedDepositAsset: undefined,
   chain: CHAIN_TYPE,
   gateway: IpfsGateway.ALGONODE_IO,
   fetchingAccountAssets: false,
@@ -90,36 +78,17 @@ export const getAccountAssets = createAsyncThunk(
   },
 );
 
-export const getInfluenceDepositTxns = createAsyncThunk(
-  `walletConnect/getInfluenceDepositTxns`,
-  async (
-    { chain, managerAddress }: { chain: ChainType; managerAddress: string },
-    { getState },
-  ) => {
-    let state = getState() as any;
-    state = state.walletConnect as WalletConnectState;
-
-    const rawTxns = await lookupInfluenceDepositTxns(
-      chain,
-      state.address,
-      managerAddress,
-    );
-
-    const processedTxnNotes = await parseInfluenceDepositTxns(rawTxns, chain);
-
-    return processedTxnNotes;
-  },
-);
-
-export const performOptAssets = createAsyncThunk(
-  `walletConnect/performOptAssets`,
+export const optAssets = createAsyncThunk(
+  `walletConnect/optAssets`,
   async (
     {
       assetIndexes,
+      gateway,
       connector,
       deOptIn = false,
     }: {
       assetIndexes: number[];
+      gateway: IpfsGateway;
       connector: WalletManager;
       deOptIn?: boolean;
     },
@@ -128,9 +97,9 @@ export const performOptAssets = createAsyncThunk(
     let state = getState() as any;
     state = state.walletConnect as WalletConnectState;
 
-    return await optAssets(
+    return await optAssetsForAccount(
       state.chain,
-      state.gateway,
+      gateway,
       assetIndexes,
       connector,
       state.address,
@@ -147,18 +116,11 @@ export const walletConnectSlice = createSlice({
     switchChain(state, action: PayloadAction<ChainType>) {
       if (action.payload && state.chain !== action.payload) {
         state.chain = action.payload;
-        state.selectedDepositAsset = undefined;
 
         if (typeof window !== `undefined`) {
           localStorage.setItem(`ChainType`, action.payload);
         }
       }
-    },
-    setSelectedDepositAsset(
-      state,
-      action: PayloadAction<AlgoWorldCityAsset | undefined>,
-    ) {
-      state.selectedDepositAsset = action.payload;
     },
     setGateway: (state, action: PayloadAction<IpfsGateway>) => {
       state.gateway = action.payload;
@@ -181,14 +143,6 @@ export const walletConnectSlice = createSlice({
     builder.addCase(getAccountAssets.pending, (state) => {
       state.fetchingAccountAssets = true;
     });
-
-    builder.addCase(getInfluenceDepositTxns.fulfilled, (state, action) => {
-      state.fetchingInfluenceTxnNotes = false;
-      state.influenceTxnNotes = action.payload;
-    });
-    builder.addCase(getInfluenceDepositTxns.pending, (state) => {
-      state.fetchingInfluenceTxnNotes = true;
-    });
   },
 });
 
@@ -197,12 +151,7 @@ export const selectAssets = createSelector(
   (assets) => assets.map((a) => ({ ...a, amount: a.amount })),
 );
 
-export const {
-  switchChain,
-  reset,
-  onSessionUpdate,
-  setSelectedDepositAsset,
-  setGateway,
-} = walletConnectSlice.actions;
+export const { switchChain, reset, onSessionUpdate, setGateway } =
+  walletConnectSlice.actions;
 
 export default walletConnectSlice.reducer;

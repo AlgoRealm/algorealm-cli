@@ -2,34 +2,24 @@ import { Box, Container, IconButton, Stack } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHoriz';
-import HelpIcon from '@mui/icons-material/Help';
-import HomeIcon from '@mui/icons-material/Home';
-import { useState } from 'react';
-import { setIsAboutPopupOpen } from '@/redux/slices/applicationSlice';
-import { useAppDispatch } from '@/redux/store/hooks';
 
 function ReferenceButtons() {
   return (
     <Stack justifyContent={`center`} direction="row">
-      <IconButton
-        size="small"
-        target={`_blank`}
-        href="https://t.me/algoworld_nft"
-      >
+      <IconButton size="small" target={`_blank`} href="https://t.me/algorealm">
         <TelegramIcon />
       </IconButton>
       <IconButton
         size="small"
         target={`_blank`}
-        href="https://twitter.com/algoworld_nft"
+        href="https://twitter.com/algorealm"
       >
         <TwitterIcon />
       </IconButton>
       <IconButton
         size="small"
         target={`_blank`}
-        href="https://github.com/AlgoWorldNFT"
+        href="https://github.com/AlgoRealm"
       >
         <GitHubIcon />
       </IconButton>
@@ -37,32 +27,7 @@ function ReferenceButtons() {
   );
 }
 
-const navBarItems = [
-  {
-    id: `gallery`,
-    url: `/gallery`,
-    label: `Gallery`,
-    icon: HomeIcon,
-  },
-  {
-    id: `myTransactions`,
-    url: `/my-transactions`,
-    label: `My Transactions`,
-    icon: SwapHorizontalCircleIcon,
-  },
-  {
-    id: `about`,
-    url: ``,
-    label: `About`,
-    action: setIsAboutPopupOpen,
-    icon: HelpIcon,
-  },
-];
-
 const Footer = () => {
-  const [navBarValue, setNavBarValue] = useState(0);
-  const dispatch = useAppDispatch();
-
   return (
     <>
       <Box

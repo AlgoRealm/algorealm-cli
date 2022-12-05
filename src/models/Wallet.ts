@@ -1,6 +1,6 @@
 /**
  * AlgoRealm
- * Copyright (C) 2022 AlgoWorld
+ * Copyright (C) 2022 AlgoRealm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ export type WalletClient = {
   iconPath?: string;
 };
 
-export interface AlgoWorldWallet {
+export interface AlgoRealmWallet {
   address: () => string;
   signTransactions: (txnGroup: Transaction[]) => Promise<any[]>;
   connect(): Promise<void>;

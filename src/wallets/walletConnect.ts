@@ -1,5 +1,5 @@
-import { AlgoWorldWallet, WalletType } from '@/models/Wallet';
-import { encodeAddress, Transaction } from 'algosdk';
+import { AlgoRealmWallet, WalletType } from '@/models/Wallet';
+import { encodeAddress, Transaction, decodeSignedTransaction } from 'algosdk';
 import store from '@/redux/store';
 import { onSessionUpdate } from '@/redux/slices/walletConnectSlice';
 import { CONNECTED_WALLET_TYPE } from '@/common/constants';
@@ -18,7 +18,7 @@ export class WalletConnectSingleton {
   }
 }
 
-export default class WalletConnectClient implements AlgoWorldWallet {
+export default class WalletConnectClient implements AlgoRealmWallet {
   private client: PeraWalletConnect;
 
   constructor(client: PeraWalletConnect) {
@@ -27,7 +27,14 @@ export default class WalletConnectClient implements AlgoWorldWallet {
 
   public connect = async () => {
     if (this.client.isConnected) return;
-    const accounts = await this.client.connect();
+    let accounts = [];
+
+    try {
+      accounts = await this.client.connect();
+    } catch (e) {
+      console.warn(e);
+      accounts = await this.client.reconnectSession();
+    }
 
     if (this.client.connector) {
       this.client.connector.on(`disconnect`, this.disconnect);
@@ -56,11 +63,22 @@ export default class WalletConnectClient implements AlgoWorldWallet {
       ) {
         return [{ txn: txn, signers: [this.client.connector?.accounts[0]] }];
       } else {
-        return [];
+        return [{ txn: txn, signers: [] }];
       }
     });
 
-    return await this.client.signTransaction(txns);
+    const response = await this.client.signTransaction(txns);
+
+    return txnGroup.map((txn) => {
+      for (const signedTxn of response) {
+        const decodedTxn = decodeSignedTransaction(signedTxn);
+        console.log(decodedTxn.txn.txID().toString());
+        if (decodedTxn.txn.txID() === txn.txID().toString()) {
+          return signedTxn;
+        }
+      }
+      return null;
+    });
   };
 
   public disconnect = async () => {

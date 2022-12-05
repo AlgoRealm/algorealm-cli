@@ -1,10 +1,10 @@
 import { CONNECTED_WALLET_TYPE } from '@/common/constants';
-import { AlgoWorldWallet, WalletType } from '@/models/Wallet';
+import { AlgoRealmWallet, WalletType } from '@/models/Wallet';
 import { onSessionUpdate, reset } from '@/redux/slices/walletConnectSlice';
 import store from '@/redux/store';
 import algosdk, { Account, encodeAddress, Transaction } from 'algosdk';
 
-export default class MnemonicClient implements AlgoWorldWallet {
+export default class MnemonicClient implements AlgoRealmWallet {
   private client: Account | undefined;
   private mnemonic: string;
 

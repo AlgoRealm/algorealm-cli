@@ -1,6 +1,6 @@
 /**
  * AlgoRealm
- * Copyright (C) 2022 AlgoWorld
+ * Copyright (C) 2022 AlgoRealm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ import { LoadingIndicator } from '@/models/LoadingIndicator';
 
 const initialState = {
   isWalletPopupOpen: false,
-  isDepositInfluencePopupOpen: false,
   isAboutPopupOpen: false,
   loadingIndicator: {
     isLoading: false,
@@ -40,9 +39,6 @@ export const applicationSlice = createSlice({
     setLoadingIndicator: (state, action: PayloadAction<LoadingIndicator>) => {
       state.loadingIndicator = action.payload;
     },
-    setIsDepositInfluencePopupOpen: (state, action: PayloadAction<boolean>) => {
-      state.isDepositInfluencePopupOpen = action.payload;
-    },
     setIsAboutPopupOpen: (state, action: PayloadAction<boolean>) => {
       state.isAboutPopupOpen = action.payload;
     },
@@ -57,7 +53,6 @@ export const applicationSlice = createSlice({
 
 export const {
   setIsWalletPopupOpen,
-  setIsDepositInfluencePopupOpen,
   setIsAboutPopupOpen,
   setLoadingIndicator,
   setTheme,

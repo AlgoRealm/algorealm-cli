@@ -1,6 +1,6 @@
 /**
  * AlgoRealm
- * Copyright (C) 2022 AlgoWorld
+ * Copyright (C) 2022 AlgoRealm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EMPTY_ASSET_IMAGE_URL } from '@/common/constants';
 import { Asset } from '@/models/Asset';
 import { ChainType } from '@/models/Chain';
 import { IpfsGateway } from '@/models/Gateway';
@@ -48,7 +47,7 @@ export default async function getAssetsForAccount(
       creator: ``,
       index: Number(id),
       name: ``,
-      imageUrl: EMPTY_ASSET_IMAGE_URL(gateway),
+      imageUrl: ``,
       decimals: 0,
       unitName: ``,
       amount: Number(amount),
@@ -73,7 +72,7 @@ export default async function getAssetsForAccount(
               : ``;
             asset[`imageUrl`] = assetParams.hasOwnProperty(`url`)
               ? ipfsToProxyUrl(assetParams[`url`], gateway)
-              : EMPTY_ASSET_IMAGE_URL(gateway);
+              : ``;
             asset[`decimals`] = assetParams[`decimals`];
             asset[`unitName`] = assetParams[`unit-name`];
             asset[`creator`] = assetParams[`creator`];
@@ -89,7 +88,7 @@ export default async function getAssetsForAccount(
     amount: algoBalance,
     creator: ``,
     frozen: false,
-    imageUrl: EMPTY_ASSET_IMAGE_URL(gateway),
+    imageUrl: ``,
     decimals: 6,
     name: `Algo`,
     unitName: `Algo`,
