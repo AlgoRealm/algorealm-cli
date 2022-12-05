@@ -1,6 +1,9 @@
 name: Trigger release
 
 on:
+  pull_request:
+    branches:
+      - '*'
   push:
     branches:
       - 'main'
