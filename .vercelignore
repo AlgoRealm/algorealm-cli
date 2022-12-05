@@ -16,3 +16,4 @@
 !next.config.js
 !.swcrc
 !vercel.json
+!global.d.ts
