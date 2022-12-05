@@ -68,16 +68,16 @@ export const ALGOREALM_SCEPTRE_ID = (chain: ChainType) => {
 
 export const ALGOREALM_POEM = `
 ◦,-----------------------------------------.
-(_\\◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦\\
+(_\\◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦\\
 ◦◦◦|◦◦There◦was◦a◦time◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
 ◦◦◦|◦◦When◦nothing◦but◦Entropy◦was◦there.◦◦◦◦|
 ◦◦◦|◦◦Then◦came◦the◦cryptographic◦Proof,◦◦◦◦◦|
 ◦◦◦|◦◦And◦took◦it◦care.◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
 ◦◦◦|◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
-◦◦◦|◦◦Verifiability◦of◦randomness,◦◦◦◦◦◦◦◦◦◦◦|
+◦◦◦|◦◦Verifiability◦of◦Randomness,◦◦◦◦◦◦◦◦◦◦◦|
 ◦◦◦|◦◦Since◦genesis◦block,◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
 ◦◦◦|◦◦Brings◦Consensus◦over◦realm◦vastness,◦◦|
-◦◦◦|◦◦So◦Algorand◦never◦fork.◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
+◦◦◦|◦◦So◦Algorand◦shall◦not◦fork.◦◦◦◦◦◦◦◦◦◦◦◦|
 ◦◦_|◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦|
 ◦(_/___________________(*)___________________/
 ◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦\\\◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦
