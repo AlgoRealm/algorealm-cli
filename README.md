@@ -7,7 +7,7 @@
 
 ## 📃 About
 
-The following repository hosts the source codes for `AlgoRealm UI` build by [@aorumbayev](https://twitter.com/aorumbayev) for [algorealm](https://github.com/cusma/algorealm) game by [@cusma](https://twitter.com/cusma_b). Free and open-source NFT explorer built for AlgoWorld NFT community. Distributed under GPLv3 license. Powered by Algorand.
+The following repository hosts the source codes for `AlgoRealm UI` build by [@aorumbayev](https://twitter.com/aorumbayev) for [algorealm](https://github.com/cusma/algorealm) game by [@cusma](https://twitter.com/cusma_b). Distributed under GPLv3 license. Powered by Algorand.
 
 > _**⚠️ NOTE: [algorealm contracts](https://github.com/cusma/algorealm) are not formally audited by accredited third parties. This is an open source game with intention to serve as educational material, use on MainNet is at your own risk**_
 
