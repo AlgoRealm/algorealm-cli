@@ -257,12 +257,7 @@ const Console = () => {
 
     if (typeof window !== `undefined`) {
       const persistedChainType =
-        chain !== undefined
-          ? chain.toLowerCase() === `mainnet`
-            ? ChainType.MainNet
-            : ChainType.TestNet
-          : (localStorage.getItem(`ChainType`) as ChainType) ??
-            ChainType.TestNet;
+        (localStorage.getItem(`ChainType`) as ChainType) ?? ChainType.TestNet;
       changeChain(persistedChainType);
     }
 
@@ -294,7 +289,7 @@ const Console = () => {
           promptLabelStyle={{ color: `#FFFFFF` }} // Prompt label colour
           inputTextStyle={{ color: `white` }} // Prompt text colour
           commands={commands}
-          welcomeMessage={`Welcome to the AlgoRealm v0.1.0 👑`}
+          welcomeMessage={`Welcome to the AlgoRealm v0.1.0 👑\nType 'help' to get started.`}
           promptLabel={customPromptLabel}
         />
       </Container>
