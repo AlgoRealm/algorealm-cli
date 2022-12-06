@@ -1,3 +1,5 @@
+const lineSeparator = `================`;
+
 export const getAlgoRealmHistory = (algorealmCalls: any[]) => {
   const claimsHistory = [];
 
@@ -33,5 +35,5 @@ export const getAlgoRealmHistory = (algorealmCalls: any[]) => {
     }
   }
 
-  return claimsHistory.join(`\n`);
+  return claimsHistory.join(lineSeparator);
 };
