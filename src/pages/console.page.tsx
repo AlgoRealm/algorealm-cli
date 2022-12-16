@@ -22,26 +22,26 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import Terminal from 'react-console-emulator';
 import { ellipseAddress } from '@/utils/ellipseAddress';
 import { ChainType } from '@/models/Chain';
-import { getAlgoRealmHistory } from '@/utils/transactions/getAlgoRealmHistory';
-import { getAlgoRealmCalls } from '@/utils/transactions/getAlgoRealmCalls';
-import {
-  ALGOREALM_CROWN_ID,
-  ALGOREALM_POEM,
-  ALGOREALM_SCEPTRE_ID,
-  CONNECTED_WALLET_TYPE,
-} from '@/common/constants';
+import { CONNECTED_WALLET_TYPE } from '@/common/constants';
 import { ConnectContext } from '@/redux/store/connector';
 import { WalletType } from '@/models/Wallet';
 import {
   getAccountAssets,
   onSessionUpdate,
-  switchChain,
+  setChain,
+  setGateway,
 } from '@/redux/slices/walletConnectSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
-import { optAssets } from '@/redux/slices/walletConnectSlice';
-import { getClaimAssetTxns } from '@/utils/transactions/getClaimAssetTxns';
-import submitTransactions from '@/utils/transactions/submitTransactions';
-import { hasAsset } from '@/utils/assets/hasAsset';
+import { changeChain } from '@/commands/changeChain';
+import { changeGateway } from '@/commands/changeGateway';
+import { IpfsGateway } from '@/models/Gateway';
+import { getKeyByValue } from '@/utils/getKeyByValue';
+import { claimSceptre } from '@/commands/claimSceptre';
+import { claimCrown } from '@/commands/claimCrown';
+import { about } from '@/commands/about';
+import { printDynasty } from '@/commands/printDynasty';
+import { printPoem } from '@/commands/printPoem';
+import pJson from '@/package.json';
 
 const Console = () => {
   const dispatch = useAppDispatch();
@@ -87,48 +87,31 @@ const Console = () => {
     setIsConnected(false);
   };
 
-  const loadHistory = async () => {
-    const attempts = 1;
-    let algoRealmCalls = [] as Record<string, any>[];
-    while (attempts <= 5) {
-      try {
-        algoRealmCalls = await getAlgoRealmCalls(chain);
-        break;
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    return getAlgoRealmHistory(algoRealmCalls);
-  };
-
   const commands = {
     about: {
       description: `About AlgoRealm`,
-      fn: () => {
-        return `AlgoRealm UI is an open-source terminal emulator web app built by @aorumbayev for the AlgoRealm CLI game created by @cusma. AlgoRealm UI is available under the GPLv3 license. CLI commands are identical to the original commands in the AlgoRealm documentation. However, they simplify the authentication and provide a higher degree of extensibility in the future. For more details, refer to https://github.com/cusma/algorealm - another fun way to play AlgoRealm that allows learning a few lower-level nuances of interacting with the Algorand blockchain.`;
-      },
+      fn: about,
     },
     dynasty: {
       description: `Print entire AlgoRealm dynasty`,
       fn: async () => {
-        return await loadHistory();
+        return await printDynasty(chain);
       },
     },
     poem: {
       description: `Prints a poem.`,
       link: `https://github.com/linuswillner/react-console-emulator/blob/master/demo/App.jsx#L70-L75`,
-      fn: () => {
-        return ALGOREALM_POEM;
-      },
+      fn: printPoem,
     },
     'change-chain': {
       description: `Change chain`,
       usage: `change-chain mainnet|testnet`,
-      fn: (chain: ChainType) => {
-        dispatch(switchChain(chain));
-        return `Chain changed to ${chain}`;
-      },
+      fn: changeChain,
+    },
+    'change-gateway': {
+      description: `Change gateway`,
+      usage: `change-gateway dweb|ipfs|cloudflare|algonode`,
+      fn: changeGateway,
     },
     'claim-crown': {
       description: `Claim the Crown of Entropy, become the Randomic Majesty of Algorand.`,
@@ -141,38 +124,15 @@ const Console = () => {
         const majestyName = args[0];
         const algos = Number(args[1]) * 1e6;
 
-        if (!connector.connected) {
-          return `You must connect to PeraWallet to claim the Crown of Entropy.`;
-        }
-
-        if (hasAsset(ALGOREALM_CROWN_ID(chain), assets)) {
-          await dispatch(
-            optAssets({
-              assetIndexes: [ALGOREALM_CROWN_ID(chain)],
-              gateway,
-              connector,
-            }),
-          );
-        }
-
-        const claimTxns = await getClaimAssetTxns(
-          chain,
-          address,
-          ALGOREALM_CROWN_ID(chain),
-          `Crown`,
+        return await claimCrown(
           majestyName,
           algos,
+          chain,
+          address,
+          assets,
+          gateway,
+          connector,
         );
-
-        const signedTxns = await connector.signTransactions(claimTxns);
-
-        if (!signedTxns) {
-          return undefined;
-        }
-
-        const txnResponse = await submitTransactions(chain, signedTxns);
-
-        return `Transactions ${txnResponse.txId} performed. 👑 Glory to ${majestyName}, the Randomic Majesty of Algorand! 🎉`;
       },
     },
     'claim-sceptre': {
@@ -186,38 +146,15 @@ const Console = () => {
         const majestyName = args[0];
         const algos = Number(args[1]) * 1e6;
 
-        if (!connector.connected) {
-          return `You must connect to PeraWallet to claim the Sceptre of Proof.`;
-        }
-
-        if (!hasAsset(ALGOREALM_SCEPTRE_ID(chain), assets)) {
-          await dispatch(
-            optAssets({
-              assetIndexes: [ALGOREALM_SCEPTRE_ID(chain)],
-              gateway,
-              connector,
-            }),
-          );
-        }
-
-        const claimTxns = await getClaimAssetTxns(
-          chain,
-          address,
-          ALGOREALM_SCEPTRE_ID(chain),
-          `Crown`,
+        return await claimSceptre(
           majestyName,
           algos,
+          chain,
+          address,
+          assets,
+          gateway,
+          connector,
         );
-
-        const signedTxns = await connector.signTransactions(claimTxns);
-
-        if (!signedTxns) {
-          return undefined;
-        }
-
-        const txnResponse = await submitTransactions(chain, signedTxns);
-
-        return `Transactions ${txnResponse.txId} performed. 👑 Glory to ${majestyName}, the Verifiable Majesty of Algorand! 🎉`;
       },
     },
     login: {
@@ -245,14 +182,15 @@ const Console = () => {
   };
 
   const customPromptLabel = useMemo(() => {
+    const gatewayTitle = getKeyByValue(IpfsGateway, gateway).toLowerCase();
     return isConnected
-      ? `(${ellipseAddress(address, 4)})|${chain}$➜`
-      : `[${chain}]$➜`;
-  }, [address, chain, isConnected]);
+      ? `(${ellipseAddress(address, 4)})•${chain}•${gatewayTitle}•$➜`
+      : `[${chain}•${gatewayTitle}]➜`;
+  }, [address, chain, isConnected, gateway]);
 
   useEffect(() => {
     const changeChain = (chain: ChainType) => {
-      dispatch(switchChain(chain));
+      dispatch(setChain(chain));
     };
 
     if (typeof window !== `undefined`) {
@@ -270,6 +208,12 @@ const Console = () => {
 
     if (address) {
       dispatch(getAccountAssets({ chain: chain, gateway, address }));
+    }
+
+    const persistedGateway = localStorage.getItem(`IpfsGateway`) as IpfsGateway;
+
+    if (persistedGateway) {
+      dispatch(setGateway(persistedGateway));
     }
   }, [dispatch, connector, address, chain, connect, gateway]);
 
@@ -289,7 +233,7 @@ const Console = () => {
           promptLabelStyle={{ color: `#FFFFFF` }} // Prompt label colour
           inputTextStyle={{ color: `white` }} // Prompt text colour
           commands={commands}
-          welcomeMessage={`Welcome to the AlgoRealm v0.1.0 👑\nType 'help' to get started.`}
+          welcomeMessage={`Welcome to the AlgoRealm v${pJson.version} 👑\nType 'help' to get started.`}
           promptLabel={customPromptLabel}
         />
       </Container>

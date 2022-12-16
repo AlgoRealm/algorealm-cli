@@ -28,7 +28,7 @@ const logger: Middleware =
   ({ getState }: { getState: StoreGetSate }) =>
   (next: Dispatch) =>
   (action: PayloadAction<any, string, any, SerializedError>) => {
-    if (action.type === `walletConnect/switchChain`) {
+    if (action.type === `walletConnect/setChain`) {
       console.log(`switch chain: `, action.payload);
     }
     if (action.type === `walletConnect/getAccountAssets/pending`) {

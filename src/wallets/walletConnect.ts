@@ -72,7 +72,6 @@ export default class WalletConnectClient implements AlgoRealmWallet {
     return txnGroup.map((txn) => {
       for (const signedTxn of response) {
         const decodedTxn = decodeSignedTransaction(signedTxn);
-        console.log(decodedTxn.txn.txID().toString());
         if (decodedTxn.txn.txID() === txn.txID().toString()) {
           return signedTxn;
         }

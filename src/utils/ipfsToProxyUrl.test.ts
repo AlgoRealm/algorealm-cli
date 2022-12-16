@@ -5,7 +5,7 @@ describe(`ipfsToProxyUrl()`, () => {
   it(`converts ipfs url correctly`, () => {
     const url = ipfsToProxyUrl(
       `ipfs://Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu`,
-      IpfsGateway.DWEB_LINK,
+      IpfsGateway.DWEB,
     );
 
     expect(url).toEqual(
