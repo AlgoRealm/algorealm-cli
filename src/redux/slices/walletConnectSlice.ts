@@ -59,7 +59,7 @@ const initialState = {
     },
   ],
   chain: CHAIN_TYPE,
-  gateway: IpfsGateway.ALGONODE_IO,
+  gateway: IpfsGateway.ALGONODE,
   fetchingAccountAssets: false,
 } as WalletConnectState;
 
@@ -113,7 +113,7 @@ export const walletConnectSlice = createSlice({
   name: `walletConnect`,
   initialState,
   reducers: {
-    switchChain(state, action: PayloadAction<ChainType>) {
+    setChain(state, action: PayloadAction<ChainType>) {
       if (action.payload && state.chain !== action.payload) {
         state.chain = action.payload;
 
@@ -151,7 +151,7 @@ export const selectAssets = createSelector(
   (assets) => assets.map((a) => ({ ...a, amount: a.amount })),
 );
 
-export const { switchChain, reset, onSessionUpdate, setGateway } =
+export const { setChain, reset, onSessionUpdate, setGateway } =
   walletConnectSlice.actions;
 
 export default walletConnectSlice.reducer;
