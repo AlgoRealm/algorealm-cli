@@ -32,6 +32,11 @@ import store from '@/redux/store';
 import { ConnectContext, connector } from '@/redux/store/connector';
 import { Slide } from '@mui/material';
 import { GoogleAnalytics } from 'nextjs-google-analytics';
+import {
+  initializeProviders,
+  PROVIDER_ID,
+  WalletProvider,
+} from '@txnlab/use-wallet';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -39,6 +44,15 @@ const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
+
+const walletProviders = initializeProviders([
+  PROVIDER_ID.MYALGO,
+  PROVIDER_ID.PERA,
+  PROVIDER_ID.EXODUS,
+  PROVIDER_ID.DEFLY,
+  PROVIDER_ID.WALLETCONNECT,
+  PROVIDER_ID.ALGOSIGNER,
+]);
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
@@ -67,24 +81,26 @@ export default function MyApp(props: MyAppProps) {
 
       <Provider store={store}>
         <ConnectContext.Provider value={connector}>
-          <ThemeProvider theme={darkTheme}>
-            <SnackbarProvider
-              maxSnack={3}
-              anchorOrigin={{
-                vertical: `bottom`,
-                horizontal: `center`,
-              }}
-              TransitionComponent={Slide}
-            >
-              <CssBaseline />
-              <Layout title="AlgoRealm">
-                <>
-                  <GoogleAnalytics />
-                  <Component {...pageProps} />
-                </>
-              </Layout>
-            </SnackbarProvider>
-          </ThemeProvider>
+          <WalletProvider value={walletProviders}>
+            <ThemeProvider theme={darkTheme}>
+              <SnackbarProvider
+                maxSnack={3}
+                anchorOrigin={{
+                  vertical: `bottom`,
+                  horizontal: `center`,
+                }}
+                TransitionComponent={Slide}
+              >
+                <CssBaseline />
+                <Layout title="AlgoRealm">
+                  <>
+                    <GoogleAnalytics />
+                    <Component {...pageProps} />
+                  </>
+                </Layout>
+              </SnackbarProvider>
+            </ThemeProvider>
+          </WalletProvider>
         </ConnectContext.Provider>
       </Provider>
     </CacheProvider>

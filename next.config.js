@@ -13,7 +13,7 @@ const moduleExports = {
   reactStrictMode: true,
   pageExtensions: ['page.tsx', 'page.ts', 'page.jsx', 'page.js'],
   async redirects() {
-    return [{ source: '/', destination: '/console', permanent: true }];
+    return [{ source: '/', destination: '/app', permanent: true }];
   },
   images: {
     domains: [

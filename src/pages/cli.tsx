@@ -43,7 +43,7 @@ import { printDynasty } from '@/commands/printDynasty';
 import { printPoem } from '@/commands/printPoem';
 import pJson from '@/package.json';
 
-const Console = () => {
+const CLI = () => {
   const dispatch = useAppDispatch();
   const connector = useContext(ConnectContext);
   const [isConnected, setIsConnected] = useState(false);
@@ -241,4 +241,4 @@ const Console = () => {
   );
 };
 
-export default Console;
+export default CLI;

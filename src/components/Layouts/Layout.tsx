@@ -23,6 +23,7 @@ import Footer from '../Footers/Footer';
 import { Box } from '@mui/material';
 import { useAppSelector } from '@/redux/store/hooks';
 import LoadingBackdrop from '../Backdrops/Backdrop';
+import NavBar from '../Headers/NavBar';
 
 type Props = {
   children?: ReactNode;
@@ -47,6 +48,9 @@ const Layout = ({ children, title = `This is the default title` }: Props) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <header>
+        <NavBar />
+      </header>
       <main>
         <>
           <LoadingBackdrop
