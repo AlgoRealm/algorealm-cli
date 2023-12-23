@@ -40,7 +40,7 @@
     "@mui/icons-material": "5.11.11",
     "@mui/lab": "5.0.0-alpha.123",
     "@mui/material": "5.11.13",
-    "@mui/x-data-grid": "5.17.26",
+    "@mui/x-data-grid": "6.18.6",
     "@perawallet/connect": "^1.0.7",
     "@reduxjs/toolkit": "1.9.3",
     "algosdk": "1.24.1",
